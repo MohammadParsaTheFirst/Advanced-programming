@@ -1,0 +1,73 @@
+Here’s the English translation of the problem:
+
+---
+
+### Pointers
+
+- **Time Limit**: 1 second  
+- **Memory Limit**: 256 MB  
+- **Note**: Since this question is designed for learning about pointers, the use of arrays, vectors, structs, and classes is prohibited!  
+
+The goal of this question is to implement simple versions of some array-like functions using pointers.
+
+---
+
+### Functions:
+
+1. **`insert`**: Adds the given value to the end of the "array."  
+2. **`pop`**: Removes the element at the given index from the "array."  
+3. **`swap`**: Swaps the elements at the given indices.  
+
+**Note**: Indices start from 0.
+
+A command is also provided to display the elements of the "array" in the order they were added (`print`).
+
+---
+
+### Input
+The input consists of one operation per line, which corresponds to one of the described functions. Input continues until the user types "exit."
+
+Commands:
+- For `insert`:  
+  `insert <int>`  
+
+- For `pop`:  
+  `pop <index>`  
+
+- For `swap`:  
+  `swap <index 1> <index 2>`  
+
+- For `print`:  
+  `print`
+
+---
+
+### Output
+Output is only required for the `print` command, showing the elements in the "array" in the order they were added.
+
+---
+
+### Example Input 1:
+```text
+insert 5  
+insert 6  
+insert 7  
+insert 8  
+print  
+swap 0 1  
+print  
+pop 3  
+print  
+exit  
+```
+
+**Example Output 1**:
+```text
+5 6 7 8  
+6 5 7 8  
+6 5 7  
+```
+
+---
+
+

@@ -1,0 +1,71 @@
+Robin Hood
+Time Limit: 1 second
+
+Memory Limit: 256 MB
+
+Note: The goal of this problem is to review fundamental concepts. Therefore, the use of arrays and pointers is prohibited.
+
+Robin Hood and his friends have decided to raid the sheriff of Nottingham’s tax train wagons. The team’s informant has provided the following information, in order:
+
+The time required to break the lock of each wagon.
+
+The color of each wagon (gold or silver).
+
+The time when the castle’s reinforcement forces will arrive.
+
+Since moving between wagons takes time, Robin Hood wants you to calculate the following to help him:
+
+Find a sequence of length K of wagons, such that all wagons in the sequence are golden, and the total time to break their locks equals the castle’s reinforcement arrival time.
+
+If such a sequence does not exist, find a sequence of length K with the minimum possible total lock-breaking time.
+
+Input:
+The input consists of several lines, each containing:
+
+time (the time required to break a lock)
+
+color (the color of the wagon).
+
+Each line includes one integer (time) and one string (color).
+
+The input ends with the keyword end, which indicates the end of wagon data. It is guaranteed that the keyword will always appear in this format.
+
+Afterwards, two natural numbers K and T are provided (on the same line, separated by a space):
+
+K: the number of wagons in the sequence.
+
+T: the time when reinforcements will arrive.
+
+Output:
+Your program should output the index of the first wagon in the sequence (indices start from 1).
+
+Example Input 1:
+text
+4 Gold  
+3 Silver  
+1 Silver  
+2 Gold  
+1 Gold  
+end  
+2 3  
+Example Output 1:
+
+text
+4  
+Explanation: The fourth and fifth wagons are both golden, and their combined lock-breaking time equals the reinforcement arrival time.
+
+Example Input 2:
+text
+4 Gold  
+3 Silver  
+1 Silver  
+4 Silver  
+1 Gold  
+1 Silver  
+end  
+2 4  
+Example Output 2:
+
+text
+5  
+Explanation: There are no consecutive golden wagons of length 2. The sequence with the minimum lock-breaking time is wagons 5 and 6.
