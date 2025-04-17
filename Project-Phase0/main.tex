@@ -6,11 +6,31 @@
 \usepackage{amsmath}
 \DeclareUnicodeCharacter{2212}{-}
 \usepackage{xcolor}
-
+\usepackage{graphicx, subfig, fancyhdr, amsmath, amssymb, amsthm, url, hyperref, geometry, listings, xcolor}
 %----------------------- Macros and Definitions --------------------------
 
-\newcommand{\FirstAuthor}{Mohammad Parsa Dini}
-\newcommand{\exerciseset}{Project phase 0)}
+
+\lstset{
+    language=C,                         % Set language to C
+    basicstyle=\ttfamily\small,         % Font type and size
+    numbers=left,                        % Line numbers on the left
+    numberstyle=\tiny,                   % Style of line numbers
+    stepnumber=1,                         % Show every line number
+    frame=single,                         % Frame around the code block
+    backgroundcolor=\color{gray!10},      % Light gray background
+    keywordstyle=\color{blue}\bfseries,   % Blue for keywords (bold)
+    commentstyle=\color{green!50!black},  % Green for comments
+    stringstyle=\color{red},              % Red for strings
+    breaklines=true,                      % Break long lines
+    breakatwhitespace=true,               % Break only at spaces
+    showstringspaces=false,               % Do not underline spaces in strings
+    tabsize=4                             % Set tab size to 4 spaces
+}
+
+
+
+\newcommand{\FirstAuthor}{Mohammad Parsa Dini -- std. id: 400101204}
+\newcommand{\exerciseset}{Project Phase 0}
 \title{Object-Oriented Programming \par \exerciseset}
 \author{\FirstAuthor}
 
@@ -20,8 +40,8 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[RO,LE]{\sffamily\bfseries\large Sharif University of Technology}
-\fancyhead[LO,RE]{\sffamily\bfseries\large EE 25-120: Deep Generative Models}
-\fancyfoot[LO,RE]{\sffamily\bfseries\large Problem Set 2}
+\fancyhead[LO,RE]{\sffamily\bfseries\large EE 25-120: Object-Oriented Programming}
+\fancyfoot[LO,RE]{\sffamily\bfseries\large Project Phase 0}
 \fancyfoot[RO,LE]{\sffamily\bfseries\thepage}
 \renewcommand{\headrulewidth}{1pt}
 \renewcommand{\footrulewidth}{1pt}
@@ -359,7 +379,7 @@ This approach simplifies circuit analysis. The \texttt{Circuit} class can iterat
 
 Below is a C++ code example demonstrating how a vector of \texttt{Element} pointers stores and manages different circuit elements, using polymorphism to call their virtual methods:
 
-\begin{verbatim}
+\begin{lstlisting}
 #include <iostream>
 #include <vector>
 #include <string>
@@ -453,7 +473,7 @@ int main() {
     
     return 0;
 }
-\end{verbatim}
+\end{lstlisting}
 
 In this example:
 - The \texttt{Element} class is abstract with pure virtual methods.
@@ -782,11 +802,11 @@ The \textbf{Factory Design Pattern} is ideal for creating circuit elements in th
     \item \textit{Extensibility}: New elements (e.g., diodes) can be supported by adding new creation logic in the factory.
     \item \textit{Encapsulation}: Creation details are hidden from the parser, reducing coupling.
     \item \textit{Flexibility}: Supports dynamic creation based on runtime input.
-\end{itemize]
+\end{itemize}
 
 \textbf{Sample Code Snippet (C++):}
 
-\begin{verbatim}
+\begin{lstlisting}
 #include <string>
 #include <vector>
 
@@ -840,7 +860,7 @@ public:
         : Element(id, capacitance, nodes) {}
     double getCurrent() override { /* Implement capacitor behavior */ return 0.0; }
 };
-\end{verbatim}
+\end{lstlisting}
 
 In this snippet, \texttt{ElementFactory::createElement} creates the appropriate \texttt{Element} subclass based on the \texttt{type} (e.g., “R” for \texttt{Resistor}). The parser calls this method for each SPICE file line, passing the parsed type, ID, nodes, and value. If an unknown type is encountered, a \texttt{ParsingException} is thrown. This design ensures that the SPICE simulator can handle diverse element types flexibly.
 
@@ -918,11 +938,11 @@ The \textbf{Factory Design Pattern} is ideal for creating circuit elements in th
     \item \textit{Extensibility}: New elements (e.g., diodes) can be supported by adding new creation logic in the factory.
     \item \textit{Encapsulation}: Creation details are hidden from the parser, reducing coupling.
     \item \textit{Flexibility}: Supports dynamic creation based on runtime input.
-\end{itemize]
+\end{itemize}
 
 \textbf{Sample Code Snippet (C++):}
 
-\begin{verbatim}
+\begin{lstlisting}
 #include <string>
 #include <vector>
 
@@ -976,7 +996,7 @@ public:
         : Element(id, capacitance, nodes) {}
     double getCurrent() override { /* Implement capacitor behavior */ return 0.0; }
 };
-\end{verbatim}
+\end{lstlisting}
 
 In this snippet, \texttt{ElementFactory::createElement} creates the appropriate \texttt{Element} subclass based on the \texttt{type} (e.g., “R” for \texttt{Resistor}). The parser calls this method for each SPICE file line, passing the parsed type, ID, nodes, and value. If an unknown type is encountered, a \texttt{ParsingException} is thrown. This design ensures that the SPICE simulator can handle diverse element types flexibly.
 
@@ -1220,7 +1240,7 @@ To store circuit and simulation data in the SPICE simulator for access upon reop
     \begin{itemize}
         \item \textit{Purpose}: Stores circuit and simulation data in a portable, human-readable file format using JSON.
         \item \textit{Structure}:
-        \begin{verbatim}
+        \begin{lstlisting}
         {
           "circuit": {
             "name": "FilterCircuit",
@@ -1250,9 +1270,9 @@ To store circuit and simulation data in the SPICE simulator for access upon reop
             ]
           }
         }
-        \end{verbatim}
-        \item \textit{Data Types}:
-        \begin{itemize]
+        \end{lstlisting}
+        \item \textit{\textbf{Data Types}}:
+        \begin{itemize}
             \item \texttt{name}: String (TEXT) for circuit name.
             \item \texttt{nodes}: Array of objects with \texttt{id} (String) and \texttt{voltage} (Number).
             \item \texttt{elements}: Array of objects with \texttt{type} (String), \texttt{id} (String), \texttt{value} (Number), and \texttt{nodes} (Array of Strings).
@@ -1263,7 +1283,7 @@ To store circuit and simulation data in the SPICE simulator for access upon reop
     \end{itemize}
 
     \item \textbf{Access Upon Reopening:}
-    \begin{itemize]
+    \begin{itemize}
         \item \textit{SQL}: Query the \texttt{Circuits} table to list saved circuits. Select a \texttt{circuit_id}, then retrieve associated \texttt{Nodes}, \texttt{Elements}, and \texttt{SimulationResults} to rebuild the \texttt{Circuit}.
         \item \textit{JSON}: Read the JSON file into memory, parse it, and reconstruct the \texttt{Circuit} using its \texttt{nodes}, \texttt{elements}, and \texttt{results} fields. Store multiple circuits in separate JSON files or a single file with an array of circuits.
     \end{itemize}
