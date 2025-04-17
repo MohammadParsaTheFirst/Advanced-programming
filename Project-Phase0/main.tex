@@ -1,0 +1,1281 @@
+\documentclass{article}
+\usepackage{graphicx,fancyhdr,amsmath,amssymb,amsthm,subfig,url,hyperref}
+\usepackage[margin=1in]{geometry}
+\usepackage{subfig}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\DeclareUnicodeCharacter{2212}{-}
+\usepackage{xcolor}
+
+%----------------------- Macros and Definitions --------------------------
+
+\newcommand{\FirstAuthor}{Mohammad Parsa Dini}
+\newcommand{\exerciseset}{Project phase 0)}
+\title{Object-Oriented Programming \par \exerciseset}
+\author{\FirstAuthor}
+
+\renewcommand{\theenumi}{\bf \Alph{enumi}}
+
+\fancypagestyle{plain}{}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RO,LE]{\sffamily\bfseries\large Sharif University of Technology}
+\fancyhead[LO,RE]{\sffamily\bfseries\large EE 25-120: Deep Generative Models}
+\fancyfoot[LO,RE]{\sffamily\bfseries\large Problem Set 2}
+\fancyfoot[RO,LE]{\sffamily\bfseries\thepage}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+
+\graphicspath{{figures/}}
+
+%--------------------------------- Text ----------------------------------
+
+\title{
+    \includegraphics[width=3cm]{logo.png} \\ % Adjust width as needed
+    Advanced Programming \par \exerciseset
+}
+\author{\FirstAuthor \\ \SecondAuthor}
+\date{}
+
+%-----------------------------------
+
+\begin{document}
+\maketitle
+
+\section*{Mandatory Questions}
+
+\subsection*{5.1 Designing Classes and Program Structure}
+
+\subsubsection*{5.1.1 Question 1: Class Design for SPICE Simulator}
+
+\textbf{Question:} Based on the concept of objects and classes, identify the main classes required to implement the SPICE simulator. For each class, define its attributes (data variables) and behaviors (methods). At a minimum, consider the following classes: Circuit Class, Node Class, Element Class, and derived classes from Element (e.g., resistor, capacitor, inductor, power sources, etc.).
+
+\textbf{Answer:}
+
+The SPICE simulator is implemented using object-oriented programming, with the following main classes and their attributes and behaviors:
+
+\begin{enumerate}
+    \item \textbf{Circuit Class}
+    \begin{itemize}
+        \item \textit{Attributes:}
+        \begin{itemize}
+            \item \texttt{nodes}: A list or set of \texttt{Node} objects representing all nodes in the circuit.
+            \item \texttt{elements}: A list of \texttt{Element} objects representing all circuit elements (e.g., resistors, capacitors).
+            \item \texttt{name}: A string identifier for the circuit.
+        \end{itemize}
+        \item \textit{Behaviors (Methods):}
+        \begin{itemize}
+            \item \texttt{addNode(node)}: Adds a \texttt{Node} object to the circuit.
+            \item \texttt{addElement(element)}: Adds an \texttt{Element} object to the circuit.
+            \item \texttt{removeElement(elementId)}: Removes an element by its identifier.
+            \item \texttt{analyzeCircuit()}: Performs circuit analysis (e.g., solving node voltages using numerical methods).
+            \item \texttt{getNodeById(nodeId)}: Retrieves a node by its identifier.
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Node Class}
+    \begin{itemize}
+        \item \textit{Attributes:}
+        \begin{itemize}
+            \item \texttt{nodeId}: A unique string or integer identifier for the node.
+            \item \texttt{voltage}: A float representing the node’s voltage (initially unknown or set to 0).
+            \item \texttt{connectedElements}: A list of \texttt{Element} objects connected to this node.
+        \end{itemize}
+        \item \textit{Behaviors (Methods):}
+        \begin{itemize}
+            \item \texttt{setVoltage(voltage)}: Sets the node’s voltage.
+            \item \texttt{getVoltage()}: Returns the node’s voltage.
+            \item \texttt{addConnectedElement(element)}: Adds an element to the list of connected elements.
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Element Class (Abstract Base Class)}
+    \begin{itemize}
+        \item \textit{Attributes:}
+        \begin{itemize}
+            \item \texttt{elementId}: A unique string identifier for the element.
+            \item \texttt{nodes}: A list of \texttt{Node} objects the element is connected to (typically two for two-terminal elements).
+            \item \texttt{value}: A float representing the element’s characteristic value (e.g., resistance, capacitance).
+        \end{itemize}
+        \item \textit{Behaviors (Methods):}
+        \begin{itemize}
+            \item \texttt{getCurrent()}: Abstract method to calculate the current through the element (implemented by derived classes).
+            \item \texttt{getConductance()}: Abstract method to calculate the element’s conductance (if applicable).
+            \item \texttt{connectToNodes(node1, node2)}: Connects the element to two nodes.
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Derived Classes from Element}
+    \begin{itemize}
+        \item \textbf{Resistor Class}
+        \begin{itemize}
+            \item \textit{Attributes:}
+            \begin{itemize}
+                \item Inherits all attributes from \texttt{Element}.
+                \item \texttt{resistance}: A float for the resistance value (in ohms).
+            \end{itemize}
+            \item \textit{Behaviors:}
+            \begin{itemize}
+                \item \texttt{getCurrent()}: Calculates current using Ohm’s law: \( I = \frac{V_1 - V_2}{R} \), where \( V_1, V_2 \) are node voltages.
+                \item \texttt{getConductance()}: Returns \( \frac{1}{R} \).
+            \end{itemize}
+        \end{itemize}
+
+        \item \textbf{Capacitor Class}
+        \begin{itemize}
+            \item \textit{Attributes:}
+            \begin{itemize}
+                \item Inherits all attributes from \texttt{Element}.
+                \item \texttt{capacitance}: A float for the capacitance value (in farads).
+            \end{itemize}
+            \item \textit{Behaviors:}
+            \begin{itemize}
+                \item \texttt{getCurrent()}: Calculates current using \( I = C \frac{dV}{dt} \), approximated numerically for transient analysis.
+                \item \texttt{getImpedance(frequency)}: Returns impedance \( \frac{1}{j \omega C} \) for AC analysis.
+            \end{itemize}
+        \end{itemize}
+
+        \item \textbf{Inductor Class}
+        \begin{itemize}
+            \item \textit{Attributes:}
+            \begin{itemize]
+                \item Inherits all attributes from \texttt{Element}.
+                \item \texttt{inductance}: A float for the inductance value (in henries).
+            \end{itemize}
+            \item \textit{Behaviors:}
+            \begin{itemize}
+                \item \texttt{getCurrent()}: Calculates current based on \( V = L \frac{dI}{dt} \), approximated numerically.
+                \item \texttt{getImpedance(frequency)}: Returns impedance \( j \omega L \) for AC analysis.
+            \end{itemize}
+        \end{itemize}
+
+        \item \textbf{VoltageSource Class}
+        \begin{itemize}
+            \item \textit{Attributes:}
+            \begin{itemize}
+                \item Inherits all attributes from \texttt{Element}.
+                \item \texttt{voltage}: A float for the voltage value (in volts).
+                \item \texttt{isDC}: A boolean indicating if the source is DC or AC.
+            \end{itemize}
+            \item \textit{Behaviors:}
+            \begin{itemize}
+                \item \texttt{getCurrent()}: Calculates current based on circuit analysis (e.g., using nodal analysis).
+                \item \texttt{setVoltage(voltage)}: Sets the voltage value.
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection*{5.1.2 Question 2: UML Diagram for SPICE Simulator}
+
+\textbf{Question:} Design a UML diagram of the classes for the SPICE simulator system. Show the relationships between classes using concepts such as inheritance, composition, and dependency.
+
+\textbf{Answer:}
+
+The UML diagram for the SPICE simulator system includes the following classes and relationships, described textually due to the lack of direct UML rendering in this format:
+
+\begin{itemize}
+    \item \textbf{Classes and Attributes:}
+    \begin{itemize}
+        \item \texttt{Circuit}
+        \begin{itemize}
+            \item Attributes: \texttt{nodes: List<Node>}, \texttt{elements: List<Element>}, \texttt{name: String}
+            \item Methods: \texttt{addNode()}, \texttt{addElement()}, \texttt{removeElement()}, \texttt{analyzeCircuit()}, \texttt{getNodeById()}
+        \end{itemize}
+        \item \texttt{Node}
+        \begin{itemize}
+            \item Attributes: \texttt{nodeId: String}, \texttt{voltage: Float}, \texttt{connectedElements: List<Element>}
+            \item Methods: \texttt{setVoltage()}, \texttt{getVoltage()}, \texttt{addConnectedElement()}
+        \end{itemize}
+        \item \texttt{Element} (Abstract)
+        \begin{itemize}
+            \item Attributes: \texttt{elementId: String}, \texttt{nodes: List<Node>}, \texttt{value: Float}
+            \item Methods: \texttt{getCurrent()}, \texttt{getConductance()}, \texttt{connectToNodes()}
+        \end{itemize}
+        \item \texttt{Resistor} (inherits \texttt{Element})
+        \begin{itemize}
+            \item Attributes: \texttt{resistance: Float}
+            \item Methods: \texttt{getCurrent()}, \texttt{getConductance()}
+        \end{itemize}
+        \item \texttt{Capacitor} (inherits \texttt{Element})
+        \begin{itemize}
+            \item Attributes: \texttt{capacitance: Float}
+            \item Methods: \texttt{getCurrent()}, \texttt{getImpedance()}
+        \end{itemize}
+        \item \texttt{Inductor} (inherits \texttt{Element})
+        \begin{itemize}
+            \item Attributes: \texttt{inductance: Float}
+            \item Methods: \texttt{getCurrent()}, \texttt{getImpedance()}
+        \end{itemize}
+        \item \texttt{VoltageSource} (inherits \texttt{Element})
+        \begin{itemize}
+            \item Attributes: \texttt{voltage: Float}, \texttt{isDC: Boolean}
+            \item Methods: \texttt{getCurrent()}, \texttt{setVoltage()}
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Relationships:}
+    \begin{itemize}
+        \item \textit{Inheritance}: The \texttt{Resistor}, \texttt{Capacitor}, \texttt{Inductor}, and \texttt{VoltageSource} classes inherit from the \texttt{Element} class. This is represented by a solid line with a hollow arrow pointing from each derived class to \texttt{Element}.
+        \item \textit{Composition}: The \texttt{Circuit} class contains collections of \texttt{Node} and \texttt{Element} objects. This is shown as a solid diamond arrow from \texttt{Circuit} to \texttt{Node} and \texttt{Element}, indicating that nodes and elements are part of the circuit and cannot exist independently.
+        \item \textit{Dependency}: The \texttt{Element} class depends on the \texttt{Node} class, as elements are connected to nodes. This is represented by a dashed arrow from \texttt{Element} to \texttt{Node}. Similarly, \texttt{Node} depends on \texttt{Element} for tracking connected elements (bidirectional dependency).
+    \end{itemize}
+
+    \item \textbf{UML Diagram Description:}
+    \begin{itemize}
+        \item The diagram places \texttt{Circuit} at the top, with composition arrows to \texttt{Node} and \texttt{Element}.
+        \item \texttt{Element} is an abstract class (denoted by italics or a stereotype) with inheritance arrows to \texttt{Resistor}, \texttt{Capacitor}, \texttt{Inductor}, and \texttt{VoltageSource}.
+        \item Bidirectional dashed arrows between \texttt{Element} and \texttt{Node} indicate dependency, as elements reference nodes for connections, and nodes track connected elements.
+        \item Each class box lists attributes and methods, with visibility indicators (e.g., + for public, - for private) where applicable.
+    \end{itemize}
+\end{itemize}
+
+This UML structure ensures the SPICE simulator is modular, extensible, and aligned with object-oriented principles, supporting future enhancements like transient or AC analysis.
+\subsection*{5.2 Implementing Classes and Their Relationships}
+
+\subsubsection*{5.2.1 Question 3: Abstract Element Class and Derived Classes}
+
+\textbf{Question:} Design an abstract class for Element that defines the necessary methods for all circuit elements. Then, design at least 5 derived classes from Element for different circuit elements (e.g., resistor, capacitor, inductor, voltage source, and current source). For each of these, consider virtual methods (full implementation is not required, just naming the methods and explaining their functionality is sufficient).
+
+\textbf{Answer:}
+
+The abstract `Element` class and its derived classes are designed to model circuit elements in the SPICE simulator, with virtual methods ensuring polymorphic behavior. Below is the design:
+
+\begin{enumerate}
+    \item \textbf{Element Class (Abstract)}
+    \begin{itemize}
+        \item \textit{Attributes:}
+        \begin{itemize}
+            \item \texttt{elementId}: A string for unique identification of the element.
+            \item \texttt{nodes}: A list of \texttt{Node} pointers (typically two for two-terminal elements).
+            \item \texttt{value}: A float for the element’s characteristic value (e.g., resistance, capacitance).
+        \end{itemize}
+        \item \textit{Virtual Methods:}
+        \begin{itemize}
+            \item \texttt{virtual double getCurrent() = 0}: Pure virtual method to calculate the current through the element based on node voltages or other parameters. Must be implemented by derived classes.
+            \item \texttt{virtual double getImpedance(double frequency) = 0}: Pure virtual method to return the element’s impedance for AC analysis at a given frequency. Returns a real value for resistive elements or a complex impedance for reactive elements.
+            \item \texttt{virtual string getDescription() = 0}: Pure virtual method to return a string describing the element (e.g., type and value) for debugging or output purposes.
+            \item \texttt{virtual void connectToNodes(Node* node1, Node* node2)}: Virtual method to connect the element to two nodes, with a default implementation that assigns \texttt{node1} and \texttt{node2} to the \texttt{nodes} list. Derived classes may override for specific connection logic.
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Derived Classes}
+    \begin{itemize}
+        \item \textbf{Resistor Class}
+        \begin{itemize}
+            \item \textit{Attributes:}
+            \begin{itemize}
+                \item Inherits all attributes from \texttt{Element}.
+                \item \texttt{resistance}: A float for the resistance value (in ohms).
+            \end{itemize}
+            \item \textit{Virtual Methods:}
+            \begin{itemize}
+                \item \texttt{double getCurrent()}: Calculates current using Ohm’s law: \( I = \frac{V_1 - V_2}{R} \), where \( V_1 \) and \( V_2 \) are the voltages of the connected nodes.
+                \item \texttt{double getImpedance(double frequency)}: Returns the resistance value (real, frequency-independent).
+                \item \texttt{string getDescription()}: Returns a string like “Resistor: 100 ohms”.
+                \item \texttt{void connectToNodes(Node* node1, Node* node2)}: Uses the base class implementation to connect to two nodes.
+            \end{itemize}
+        \end{itemize}
+
+        \item \textbf{Capacitor Class}
+        \begin{itemize}
+            \item \textit{Attributes:}
+            \begin{itemize}
+                \item Inherits all attributes from \texttt{Element}.
+                \item \texttt{capacitance}: A float for the capacitance value (in farads).
+            \end{itemize}
+            \item \textit{Virtual Methods:}
+            \begin{itemize}
+                \item \texttt{double getCurrent()}: Calculates current using \( I = C \frac{dV}{dt} \), where the voltage derivative is approximated numerically for transient analysis.
+                \item \texttt{double getImpedance(double frequency)}: Returns the complex impedance \( \frac{1}{j \omega C} \), where \( \omega = 2\pi f \).
+                \item \texttt{string getDescription()}: Returns a string like “Capacitor: 1uF”.
+                \item \texttt{void connectToNodes(Node* node1, Node* node2)}: Uses the base class implementation.
+            \end{itemize}
+        \end{itemize}
+
+        \item \textbf{Inductor Class}
+        \begin{itemize}
+            \item \textit{Attributes:}
+            \begin{itemize}
+                \item Inherits all attributes from \texttt{Element}.
+                \item \texttt{inductance}: A float for the inductance value (in henries).
+            \end{itemize}
+            \item \textit{Virtual Methods:}
+            \begin{itemize}
+                \item \texttt{double getCurrent()}: Calculates current based on \( V = L \frac{dI}{dt} \), using numerical methods to track current changes.
+                \item \texttt{double getImpedance(double frequency)}: Returns the complex impedance \( j \omega L \), where \( \omega = 2\pi f \).
+                \item \texttt{string getDescription()}: Returns a string like “Inductor: 10mH”.
+                \item \texttt{void connectToNodes(Node* node1, Node* node2)}: Uses the base class implementation.
+            \end{itemize}
+        \end{itemize}
+
+        \item \textbf{VoltageSource Class}
+        \begin{itemize}
+            \item \textit{Attributes:}
+            \begin{itemize}
+                \item Inherits all attributes from \texttt{Element}.
+                \item \texttt{voltage}: A float for the voltage value (in volts).
+                \item \texttt{isDC}: A boolean indicating DC or AC source.
+            \end{itemize}
+            \item \textit{Virtual Methods:}
+            \begin{itemize}
+                \item \texttt{double getCurrent()}: Calculates the current through the voltage source, determined via circuit analysis (e.g., nodal analysis).
+                \item \texttt{double getImpedance(double frequency)}: Returns a small nominal impedance (e.g., 0.001 ohms) for DC or AC analysis to avoid singularities.
+                \item \texttt{string getDescription()}: Returns a string like “Voltage Source: 5V DC”.
+                \item \texttt{void connectToNodes(Node* node1, Node* node2)}: Connects the positive terminal to \texttt{node1} and negative to \texttt{node2}, updating node references.
+            \end{itemize}
+        \end{itemize}
+
+        \item \textbf{CurrentSource Class}
+        \begin{itemize}
+            \item \textit{Attributes:}
+            \begin{itemize}
+                \item Inherits all attributes from \texttt{Element}.
+                \item \texttt{current}: A float for the current value (in amperes).
+                \item \texttt{isDC}: A boolean indicating DC or AC source.
+            \end{itemize}
+            \item \textit{Virtual Methods:}
+            \begin{itemize}
+                \item \texttt{double getCurrent()}: Returns the fixed current value specified by the source.
+                \item \texttt{double getImpedance(double frequency)}: Returns a large nominal impedance (e.g., 1M ohms) to model an ideal current source.
+                \item \texttt{string getDescription()}: Returns a string like “Current Source: 2A DC”.
+                \item \texttt{void connectToNodes(Node* node1, Node* node2)}: Connects the current flow from \texttt{node1} to \texttt{node2}, updating node references.
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+
+This design ensures that all circuit elements share a common interface through the abstract \texttt{Element} class, with specific behaviors implemented in derived classes.
+
+\subsubsection*{5.2.2 Question 4: Polymorphism in Managing Circuit Elements}
+
+\textbf{Question:} Considering the concept of polymorphism in object-oriented programming, explain how this concept can be used to manage various circuit elements. Provide a code example showing how an array or vector of Element pointers can be used to store and manage different circuit elements.
+
+\textbf{Answer:}
+
+Polymorphism in object-oriented programming allows objects of different derived classes to be treated as instances of their common base class. In the SPICE simulator, polymorphism enables the \texttt{Circuit} class to manage a collection of diverse circuit elements (e.g., resistors, capacitors, voltage sources) uniformly through pointers to the abstract \texttt{Element} class. This is achieved via virtual methods in the \texttt{Element} class, which are overridden in derived classes to provide specific implementations. For example, calling \texttt{getCurrent()} on an \texttt{Element} pointer invokes the appropriate derived class’s implementation (e.g., Ohm’s law for a \texttt{Resistor}, or a fixed value for a \texttt{CurrentSource}) without needing to know the element’s specific type.
+
+This approach simplifies circuit analysis. The \texttt{Circuit} class can iterate over a vector of \texttt{Element} pointers, calling methods like \texttt{getCurrent()} or \texttt{getImpedance()} to compute circuit properties, regardless of the element types. It also makes the system extensible: new element types (e.g., diodes) can be added by creating new derived classes without modifying the \texttt{Circuit} class’s logic.
+
+Below is a C++ code example demonstrating how a vector of \texttt{Element} pointers stores and manages different circuit elements, using polymorphism to call their virtual methods:
+
+\begin{verbatim}
+#include <iostream>
+#include <vector>
+#include <string>
+
+class Node {
+public:
+    std::string nodeId;
+    double voltage;
+    Node(std::string id) : nodeId(id), voltage(0.0) {}
+};
+
+class Element {
+public:
+    std::string elementId;
+    Node* nodes[2];
+    double value;
+    Element(std::string id, double val) : elementId(id), value(val) {
+        nodes[0] = nullptr;
+        nodes[1] = nullptr;
+    }
+    virtual double getCurrent() = 0;
+    virtual double getImpedance(double frequency) = 0;
+    virtual std::string getDescription() = 0;
+    virtual void connectToNodes(Node* node1, Node* node2) {
+        nodes[0] = node1;
+        nodes[1] = node2;
+    }
+    virtual ~Element() {}
+};
+
+class Resistor : public Element {
+public:
+    Resistor(std::string id, double resistance) : Element(id, resistance) {}
+    double getCurrent() override {
+        double v1 = nodes[0]->voltage;
+        double v2 = nodes[1]->voltage;
+        return (v1 - v2) / value; // Ohm's law: I = (V1 - V2) / R
+    }
+    double getImpedance(double frequency) override {
+        return value; // Resistance is frequency-independent
+    }
+    std::string getDescription() override {
+        return "Resistor: " + std::to_string(value) + " ohms";
+    }
+};
+
+class VoltageSource : public Element {
+public:
+    VoltageSource(std::string id, double voltage) : Element(id, voltage) {}
+    double getCurrent() override {
+        // Current determined by circuit analysis (placeholder)
+        return 0.0;
+    }
+    double getImpedance(double frequency) override {
+        return 0.001; // Small impedance for analysis
+    }
+    std::string getDescription() override {
+        return "Voltage Source: " + std::to_string(value) + " V";
+    }
+};
+
+int main() {
+    // Create nodes
+    Node n1("N1"), n2("N2"), n3("N3");
+    n1.voltage = 5.0; // Example voltages
+    n2.voltage = 0.0;
+    
+    // Create vector of Element pointers
+    std::vector<Element*> elements;
+    
+    // Add different elements
+    elements.push_back(new Resistor("R1", 100.0));
+    elements.push_back(new VoltageSource("V1", 5.0));
+    
+    // Connect elements to nodes
+    elements[0]->connectToNodes(&n1, &n2); // Resistor between N1 and N2
+    elements[1]->connectToNodes(&n2, &n3); // Voltage source between N2 and N3
+    
+    // Polymorphically access elements
+    for (Element* element : elements) {
+        std::cout << element->getDescription() << std::endl;
+        std::cout << "Current: " << element->getCurrent() << " A" << std::endl;
+        std::cout << "Impedance (at 1kHz): " << element->getImpedance(1000.0) 
+                  << " ohms" << std::endl;
+    }
+    
+    // Clean up memory
+    for (Element* element : elements) {
+        delete element;
+    }
+    
+    return 0;
+}
+\end{verbatim}
+
+In this example:
+- The \texttt{Element} class is abstract with pure virtual methods.
+- \texttt{Resistor} and \texttt{VoltageSource} override these methods with specific implementations.
+- A \texttt{std::vector<Element*>} stores pointers to different element types.
+- The \texttt{for} loop iterates over the vector, calling \texttt{getDescription()}, \texttt{getCurrent()}, and \texttt{getImpedance()} polymorphically, producing the correct behavior for each element type (e.g., Ohm’s law for \texttt{Resistor}, fixed impedance for \texttt{VoltageSource}).
+- Memory is managed by deleting the dynamically allocated elements.
+
+This polymorphic design ensures the SPICE simulator can handle diverse elements uniformly, facilitating circuit analysis and future extensions.
+
+
+
+
+
+\subsection*{5.3 Design Patterns and Circuit Analysis}
+
+\subsubsection*{5.3.1 Question 5: Design Pattern for Reading SPICE Files}
+
+\textbf{Question:} Suggest an appropriate design pattern for reading and interpreting SPICE circuit description files. Explain why this pattern is suitable and how you would implement it.
+
+\textbf{Answer:}
+
+The \textbf{Factory Method} pattern is suitable for reading and interpreting SPICE circuit description files. SPICE files textually describe circuits, with each line specifying an element (e.g., resistor, capacitor) or node, including element type, connected nodes, and values. The Factory Method pattern is ideal because it encapsulates the creation logic for different circuit element types, allowing the system to instantiate the appropriate \texttt{Element} subclass (e.g., \texttt{Resistor}, \texttt{VoltageSource}) based on the parsed input without tightly coupling the parser to specific element classes.
+
+\textbf{Why Suitable:}
+\begin{itemize}
+    \item \textit{Extensibility}: New element types (e.g., diodes) can be added by defining new subclasses and updating the factory method without modifying the file parser.
+    \item \textit{Encapsulation}: The creation logic is centralized in a factory class, hiding the complexity of instantiating different element types.
+    \item \textit{Flexibility}: The pattern supports dynamic element creation based on runtime input (e.g., file lines), aligning with SPICE’s textual format.
+\end{itemize}
+
+\textbf{Implementation:}
+\begin{itemize}
+    \item Define an abstract \texttt{ElementFactory} class with a pure virtual method \texttt{createElement(string type, string id, vector<Node*> nodes, double value)}.
+    \item Create a concrete \texttt{SpiceElementFactory} class that implements \texttt{createElement}. This method parses the element type (e.g., “R” for resistor, “V” for voltage source) and instantiates the corresponding \texttt{Element} subclass.
+    \item In the file parser, read each line of the SPICE file (e.g., “R1 1 2 100” for a 100-ohm resistor between nodes 1 and 2). Extract the type, ID, node IDs, and value, then call \texttt{SpiceElementFactory::createElement} to create the element.
+    \item The factory method uses a switch or map to map type codes to element classes. For example:
+    \begin{itemize}
+        \item If \texttt{type == "R"}, return \texttt{new Resistor(id, value)} and connect to \texttt{nodes}.
+        \item If \texttt{type == "V"}, return \texttt{new VoltageSource(id, value)} and set DC/AC properties.
+    \end{itemize}
+    \item The parser adds the created element to the \texttt{Circuit} object’s \texttt{elements} list and updates node connections.
+\end{itemize}
+
+This implementation ensures that the SPICE file parser remains decoupled from specific element types, making the system modular and easy to extend for new element types or file formats.
+
+\subsubsection*{5.3.2 Question 6: Numerical Methods for Circuit Analysis}
+
+\textbf{Question:} Research numerical methods for solving electrical circuits and explain a few. Investigate algorithms for solving equations and systems of linear equations. Specifically, research methods such as Gaussian Elimination or LU Decomposition.
+
+\textbf{Answer:}
+
+Numerical methods are essential for solving electrical circuits, particularly for computing node voltages and branch currents in circuit analysis. These methods often involve solving systems of linear equations derived from Kirchhoff’s laws and element characteristics. Below, two key methods are discussed: \textbf{Gaussian Elimination} and \textbf{LU Decomposition}.
+
+\begin{itemize}
+    \item \textbf{Gaussian Elimination}
+    \begin{itemize}
+        \item \textit{Description}: Gaussian Elimination is a method for solving a system of linear equations \( Ax = b \), where \( A \) is the coefficient matrix (e.g., conductance matrix in nodal analysis), \( x \) is the vector of unknowns (e.g., node voltages), and \( b \) is the constant vector (e.g., current sources). It transforms \( A \) into an upper triangular matrix through row operations, then uses back-substitution to solve for \( x \).
+        \item \textit{Application in Circuits}: In nodal analysis, the circuit is represented as a system of equations based on Kirchhoff’s Current Law (KCL). For example, for a node connected to resistors and a voltage source, the equation is \( G_1 V_1 + G_2 (V_1 - V_2) = I \), where \( G \) is conductance and \( V \) is voltage. Gaussian Elimination solves these equations to find all node voltages.
+        \item \textit{Process}: 
+        \begin{itemize}
+            \item Form the augmented matrix \( [A | b] \).
+            \item Use row operations (swap rows, scale rows, add multiples of rows) to convert \( A \) to upper triangular form.
+            \item Perform back-substitution to solve for \( x \).
+        \end{itemize}
+        \item \textit{Advantages}: Simple to implement for small systems; no additional storage beyond the matrix.
+        \item \textit{Limitations}: Computationally expensive (\( O(n^3) \)) for large matrices; sensitive to numerical instability without pivoting.
+    \end{itemize}
+
+    \item \textbf{LU Decomposition}
+    \begin{itemize}
+        \item \textit{Description}: LU Decomposition factors a matrix \( A \) into a lower triangular matrix \( L \) and an upper triangular matrix \( U \) such that \( A = LU \). The system \( Ax = b \) is solved by first solving \( Ly = b \) (forward substitution) and then \( Ux = y \) (back-substitution).
+        \item \textit{Application in Circuits}: LU Decomposition is used in circuit simulators like SPICE for solving large systems of equations in nodal or modified nodal analysis. It is particularly efficient for iterative analyses (e.g., transient analysis), where the matrix \( A \) remains constant but \( b \) changes.
+        \item \textit{Process}:
+        \begin{itemize}
+            \item Decompose \( A \) into \( L \) and \( U \) using algorithms like Crout’s or Doolittle’s method.
+            \item Solve \( Ly = b \) for \( y \) (forward substitution).
+            \item Solve \( Ux = y \) for \( x \) (back-substitution).
+        \end{itemize}
+        \item \textit{Advantages}: Faster for repeated solves with the same \( A \) (decomposition is done once); more stable with partial pivoting.
+        \item \textit{Limitations}: Higher initial computational cost for decomposition (\( O(n^3) \)); requires additional storage for \( L \) and \( U \).
+    \end{itemize}
+\end{itemize}
+
+Both methods are widely used in circuit simulation. Gaussian Elimination is suitable for small circuits or one-time solves, while LU Decomposition is preferred for larger circuits or iterative analyses due to its efficiency in repeated computations.
+
+\subsubsection*{5.3.3 Question 7: Solving Large Systems of Linear Equations}
+
+\textbf{Question:} One of the challenges in circuit simulation is solving large systems of linear equations. Explain how you would address this problem. Would you use external libraries or implement your own algorithms?
+
+\textbf{Answer:}
+
+Solving large systems of linear equations is a critical challenge in circuit simulation, as circuits with many nodes and elements generate large, sparse systems of equations (e.g., from nodal analysis). To address this, I propose using the \textbf{Bridge} pattern to separate the solver interface from its implementation, allowing flexibility to switch between external libraries and custom algorithms. I recommend prioritizing external libraries for production use due to their efficiency and robustness, with custom implementations as a fallback for educational or constrained environments.
+
+\textbf{Approach Using the Bridge Pattern:}
+\begin{itemize}
+    \item \textit{Interface Definition}: Define an abstract \texttt{LinearSolver} class with a pure virtual method \texttt{solve(Matrix A, Vector b, Vector\& x)}, where \texttt{A} is the coefficient matrix, \texttt{b} is the constant vector, and \texttt{x} is the solution vector.
+    \item \textit{Implementations}:
+    \begin{itemize}
+        \item \texttt{EigenSolver}: Uses the Eigen C++ library to solve the system. Eigen supports sparse matrix operations and efficient algorithms like LU Decomposition or iterative solvers (e.g., Conjugate Gradient) for large, sparse systems.
+        \item \texttt{CustomLUSolver}: A custom implementation of LU Decomposition with partial pivoting for educational purposes or environments without external libraries.
+    \end{itemize}
+    \item \textit{Bridge Usage}: The \texttt{Circuit} class holds a pointer to a \texttt{LinearSolver} object. During analysis, it calls \texttt{solve()} on the solver, which delegates to the chosen implementation (Eigen or custom). This decouples the circuit analysis logic from the solver details, allowing easy switching between implementations.
+\end{itemize}
+
+\textbf{Use of External Libraries vs. Custom Algorithms:}
+\begin{itemize}
+    \item \textit{External Libraries (Recommended)}:
+    \begin{itemize}
+        \item \textit{Why}: Libraries like Eigen, LAPACK, or SuiteSparse are optimized for performance, handle sparse matrices efficiently, and include robust algorithms (e.g., LU Decomposition, Cholesky, iterative solvers) with error handling and numerical stability features. For large circuits, sparse matrix techniques reduce memory and computation time significantly.
+        \item \textit{Example}: Use Eigen’s \texttt{SparseLU} solver for sparse systems in nodal analysis. The library handles matrix assembly and decomposition, providing fast and accurate solutions.
+        \item \textit{Implementation}: Integrate Eigen into the project, construct the conductance matrix as a sparse matrix, and call \texttt{Eigen::SparseLU::solve()}.
+    \end{itemize}
+    \item \textit{Custom Algorithms}:
+    \begin{itemize}
+        \item \textit{Why}: Custom implementations are useful for learning, small circuits, or environments where external libraries are unavailable. However, they are less efficient and harder to optimize for large, sparse systems.
+        \item \textit{Example}: Implement LU Decomposition with partial pivoting to solve the system. For sparse matrices, use a basic compressed sparse row (CSR) format to store non-zero elements.
+        \item \textit{Limitations}: Custom code is time-consuming to develop, debug, and optimize, and may not handle edge cases (e.g., ill-conditioned matrices) as well as libraries.
+    \end{itemize}
+\end{itemize}
+
+\textbf{Recommendation}: For the SPICE simulator, use an external library like Eigen for production due to its performance and reliability. The Bridge pattern allows integrating Eigen while keeping the option to switch to a custom LU Decomposition implementation for educational purposes or specific constraints. The \texttt{Circuit} class constructs the system of equations (e.g., \( GV = I \) for nodal analysis) and passes it to the \texttt{LinearSolver}, which handles the computation. This approach ensures scalability, maintainability, and flexibility for large-scale circuit simulations.
+
+\end{xaiArtifact}
+
+
+
+
+
+
+
+
+\subsection*{5.3 Design Patterns and Circuit Analysis}
+
+\subsubsection*{5.3.4 Question 8: Analyzing Transient and Steady-State Responses}
+
+\textbf{Question:} How can the transient and steady-state responses of a circuit be analyzed? Considering the need to implement first-order and second-order circuits, research methods for solving systems of differential equations. Briefly explain methods such as Euler or Runge-Kutta.
+
+\textbf{Answer:}
+
+Analyzing the transient and steady-state responses of a circuit involves modeling the circuit’s behavior over time (transient) and its long-term behavior (steady-state). For first-order circuits (e.g., RC or RL circuits) and second-order circuits (e.g., RLC circuits), this requires solving differential equations derived from Kirchhoff’s laws and element characteristics. Numerical methods like Euler and Runge-Kutta are used to solve these differential equations in circuit simulators like SPICE.
+
+\begin{itemize}
+    \item \textbf{Transient Response Analysis:}
+    \begin{itemize}
+        \item \textit{Description}: The transient response describes how circuit variables (e.g., voltages, currents) evolve from an initial state to a steady state after a change (e.g., switching a voltage source). It is governed by differential equations based on element properties (e.g., \( V = L \frac{dI}{dt} \) for inductors, \( I = C \frac{dV}{dt} \) for capacitors).
+        \item \textit{First-Order Circuits}: These involve a single energy storage element (e.g., capacitor in an RC circuit). The response is modeled by a first-order differential equation, such as \( \tau \frac{dV}{dt} + V = V_s \), where \( \tau = RC \) is the time constant. The solution is typically exponential, e.g., \( V(t) = V_s (1 - e^{-t/\tau}) \).
+        \item \textit{Second-Order Circuits}: These involve two energy storage elements (e.g., RLC circuits), leading to second-order differential equations, such as \( L C \frac{d^2V}{dt^2} + R C \frac{dV}{dt} + V = V_s \). Solutions may be overdamped, underdamped, or critically damped, depending on the damping factor.
+        \item \textit{Method}: Use numerical integration to solve these differential equations over discrete time steps, updating node voltages and branch currents.
+    \end{itemize}
+
+    \item \textbf{Steady-State Response Analysis:}
+    \begin{itemize}
+        \item \textit{Description}: The steady-state response is the circuit’s behavior after transients have decayed. For DC circuits, it involves solving algebraic equations (e.g., nodal analysis for constant voltages). For AC circuits, it involves solving phasor equations in the frequency domain, using complex impedances (e.g., \( Z_C = \frac{1}{j \omega C} \)).
+        \item \textit{Method}: For DC, solve the system \( GV = I \) using linear solvers (e.g., LU Decomposition). For AC, transform the circuit to the frequency domain, solve the complex system, and compute magnitudes and phases.
+    \end{itemize}
+
+    \item \textbf{Numerical Methods for Differential Equations:}
+    \begin{itemize}
+        \item \textbf{Euler Method}
+        \begin{itemize}
+            \item \textit{Description}: The Euler method is a simple numerical technique for solving ordinary differential equations (ODEs) of the form \( \frac{dx}{dt} = f(t, x) \). It approximates the solution by taking small time steps: \( x(t + \Delta t) = x(t) + \Delta t \cdot f(t, x(t)) \).
+            \item \textit{Application}: In an RC circuit, the voltage across a capacitor is governed by \( C \frac{dV}{dt} = I \). Given the current \( I(t) \), the Euler method updates the voltage as \( V(t + \Delta t) = V(t) + \frac{\Delta t}{C} I(t) \). This is repeated over time steps to simulate the transient response.
+            \item \textit{Advantages}: Easy to implement; computationally lightweight.
+            \item \textit{Limitations}: Low accuracy (first-order method); requires small \( \Delta t \) to avoid instability, especially for stiff systems like high-frequency circuits.
+        \end{itemize}
+
+        \item \textbf{Runge-Kutta Method (RK4)}
+        \begin{itemize}
+            \item \textit{Description}: The fourth-order Runge-Kutta (RK4) method is a more accurate technique for solving ODEs. It computes four intermediate slopes within each time step and combines them to update the solution: 
+            \[
+            x(t + \Delta t) = x(t) + \frac{\Delta t}{6} (k_1 + 2k_2 + 2k_3 + k_4),
+            \]
+            where \( k_1 = f(t, x) \), \( k_2 = f(t + \frac{\Delta t}{2}, x + \frac{\Delta t}{2} k_1) \), etc.
+            \item \textit{Application}: For an RLC circuit, the second-order ODE can be converted to a system of first-order ODEs (e.g., for voltage \( V \) and current \( I \)). RK4 updates \( V \) and \( I \) at each step, providing accurate transient responses even for oscillatory or stiff systems.
+            \item \textit{Advantages}: Higher accuracy (fourth-order); more stable than Euler for larger time steps.
+            \item \textit{Limitations}: Computationally more expensive due to multiple function evaluations per step.
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+For the SPICE simulator, the Euler method is suitable for simple first-order circuits with small time steps, while RK4 is preferred for second-order circuits or when higher accuracy is needed. The \texttt{Circuit} class can implement a time-stepping loop, applying these methods to update element states (e.g., capacitor voltages, inductor currents) for transient analysis, and switch to algebraic solvers for steady-state analysis.
+
+\subsubsection*{5.3.5 Question 9: Design for Visualizing Circuit Graphs}
+
+\textbf{Question:} What design would you use to implement algorithms for visualizing circuit graphs (DC analysis, AC analysis, etc.)? Explain your approach and the reasoning behind it.
+
+\textbf{Answer:}
+
+To implement algorithms for visualizing circuit graphs (e.g., for DC analysis, AC analysis, or transient analysis), I propose using the \textbf{Strategy} pattern. This pattern allows the SPICE simulator to support multiple visualization algorithms (e.g., plotting node voltages, drawing circuit schematics, or displaying frequency responses) by defining a common interface and swapping implementations dynamically.
+
+\textbf{Approach:}
+\begin{itemize}
+    \item \textit{Strategy Interface}: Define an abstract \texttt{Visualizer} class with a pure virtual method \texttt{visualize(Circuit* circuit, AnalysisType type, OutputFormat format)}. The \texttt{AnalysisType} enum specifies the analysis (e.g., DC, AC, Transient), and \texttt{OutputFormat} specifies the output (e.g., Graph, Table, Schematic).
+    \item \textit{Concrete Strategies}:
+    \begin{itemize}
+        \item \texttt{DCVoltagePlotVisualizer}: Generates a plot of node voltages for DC analysis, using a library like Matplotlib (for Python integration) or a graphing API. It iterates over the \texttt{Circuit}’s nodes, retrieves voltages, and plots them as a bar or line graph.
+        \item \texttt{ACFrequencyResponseVisualizer}: Creates a Bode plot for AC analysis, showing magnitude and phase of voltages or currents versus frequency. It uses impedance calculations from \texttt{Element} objects and plots results.
+        \item \texttt{TransientWaveformVisualizer}: Plots time-domain waveforms for transient analysis, showing voltage or current changes over time based on numerical solutions (e.g., from RK4).
+        \item \texttt{SchematicVisualizer}: Draws a circuit schematic, mapping \texttt{Node} and \texttt{Element} objects to graphical components (e.g., using a library like Graphviz or a custom canvas).
+    \end{itemize}
+    \item \textit{Integration}: The \texttt{Circuit} class holds a pointer to a \texttt{Visualizer} object, set at runtime based on user input or configuration (e.g., “plot DC voltages” or “show AC Bode plot”). The \texttt{visualize()} method is called after analysis, passing the circuit state and desired analysis type.
+    \item \textit{Implementation Details}:
+    \begin{itemize}
+        \item Use an external library (e.g., Matplotlib, Plotly, or SFML for graphical output) to render visualizations.
+        \item For DC analysis, extract node voltages post-solve and pass them to the \texttt{DCVoltagePlotVisualizer}.
+        \item For AC analysis, compute impedances and phasors for a range of frequencies, then pass results to \texttt{ACFrequencyResponseVisualizer}.
+        \item For transient analysis, store time-step results (e.g., from Euler or RK4) and pass them to \texttt{TransientWaveformVisualizer}.
+        \item For schematics, map \texttt{Element} and \texttt{Node} connections to a graph structure and render using a layout algorithm.
+    \end{itemize}
+\end{itemize}
+
+\textbf{Reasoning:}
+\begin{itemize}
+    \item \textit{Modularity}: The Strategy pattern decouples visualization logic from the \texttt{Circuit} class, allowing independent development and testing of visualization algorithms.
+    \item \textit{Extensibility}: New visualization types (e.g., 3D circuit layouts) can be added by creating new \texttt{Visualizer} subclasses without modifying existing code.
+    \item \textit{Flexibility}: Users can switch between visualization types (e.g., plots vs. schematics) at runtime by selecting the appropriate strategy.
+    \item \textit{Reusability}: The same \texttt{Visualizer} interface supports multiple analysis types (DC, AC, transient), reducing code duplication.
+\end{itemize}
+
+This design ensures that the SPICE simulator can produce diverse, user-friendly visualizations for circuit analysis, enhancing its utility for educational and engineering applications.
+
+\end{xaiArtifact}
+
+
+
+
+
+
+\subsection*{5.4 Error and Exception Management}
+
+\subsubsection*{5.4.1 Question 10: Exception Handling Design}
+
+\textbf{Question:} Provide an appropriate design for handling potential errors and exceptions in the SPICE simulator. What types of exceptions might occur when parsing the input file, constructing the circuit, or analyzing the circuit? How would you handle them?
+
+\textbf{Answer:}
+
+To handle potential errors in the SPICE simulator, I propose a hierarchical exception system with a base \texttt{SPICEException} class and derived classes for specific error types: \texttt{ParsingException}, \texttt{CircuitException}, and \texttt{AnalysisException}. This design ensures that errors are caught and handled appropriately at different stages of the simulation process, improving robustness and user experience.
+
+\begin{itemize}
+    \item \textbf{Exception Hierarchy:}
+    \begin{itemize}
+        \item \texttt{SPICEException}: The base class, inheriting from \texttt{std::exception}, with a \texttt{what()} method to return an error message.
+        \begin{itemize}
+            \item Attributes: \texttt{message} (string describing the error).
+            \item Methods: \texttt{virtual const char* what()} (returns the error message).
+        \end{itemize}
+        \item \texttt{ParsingException}: Derived from \texttt{SPICEException}, for errors during SPICE file parsing.
+        \begin{itemize}
+            \item Attributes: \texttt{lineNumber} (integer indicating the problematic line).
+            \item Methods: \texttt{int getLineNumber()} (returns the line number).
+        \end{itemize}
+        \item \texttt{CircuitException}: Derived from \texttt{SPICEException}, for errors during circuit construction.
+        \begin{itemize}
+            \item Attributes: \texttt{elementId} or \texttt{nodeId} (string identifying the problematic component).
+            \item Methods: \texttt{string getComponentId()} (returns the component ID).
+        \end{itemize}
+        \item \texttt{AnalysisException}: Derived from \texttt{SPICEException}, for errors during circuit analysis.
+        \begin{itemize}
+            \item Attributes: \texttt{analysisType} (string, e.g., “DC”, “Transient”).
+            \item Methods: \texttt{string getAnalysisType()} (returns the analysis type).
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Potential Errors and Handling:}
+    \begin{itemize}
+        \item \textit{Parsing Input File}:
+        \begin{itemize}
+            \item \textit{Errors}: Invalid syntax (e.g., missing node IDs in “R1 1 100”), unknown element type (e.g., “X1” instead of “R1”), or invalid values (e.g., negative resistance).
+            \item \textit{Throw}: \texttt{ParsingException} in the file parser when a line cannot be parsed. For example, if the element type is unrecognized, throw \texttt{ParsingException("Unknown element type at line 5", 5)}.
+            \item \textit{Catch}: In the \texttt{Circuit} class’s \texttt{loadFromFile()} method, catch \texttt{ParsingException}, log the error (e.g., “Error at line 5: Unknown element type”), and prompt the user to correct the file or abort.
+        \end{itemize}
+        \item \textit{Constructing the Circuit}:
+        \begin{itemize}
+            \item \textit{Errors}: Disconnected nodes (e.g., a node with no elements), duplicate element IDs, or invalid connections (e.g., a voltage source connected to a single node).
+            \item \textit{Throw}: \texttt{CircuitException} in the \texttt{Circuit} class’s \texttt{addElement()} or \texttt{addNode()} methods. For example, if an element ID already exists, throw \texttt{CircuitException("Duplicate element ID: R1", "R1")}.
+            \item \textit{Catch}: In the main simulation loop or \texttt{loadFromFile()}, catch \texttt{CircuitException}, report the error to the user (e.g., “Duplicate element ID: R1”), and either skip the faulty element or halt construction.
+        \end{itemize}
+        \item \textit{Analyzing the Circuit}:
+        \begin{itemize}
+            \item \textit{Errors}: Singular matrices (e.g., floating nodes in nodal analysis), numerical instability (e.g., in transient analysis), or convergence failures (e.g., in iterative solvers).
+            \item \textit{Throw}: \texttt{AnalysisException} in the \texttt{Circuit} class’s \texttt{analyzeCircuit()} method. For example, if the solver detects a singular matrix, throw \texttt{AnalysisException("Singular matrix in DC analysis", "DC")}.
+            \item \textit{Catch}: In the main simulation loop, catch \texttt{AnalysisException}, display the error (e.g., “DC analysis failed: Singular matrix”), and either fall back to a default state (e.g., zero voltages) or prompt the user to modify the circuit.
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Handling Strategy:}
+    \begin{itemize}
+        \item Use try-catch blocks at key points: in \texttt{loadFromFile()} for parsing, \texttt{addElement()/addNode()} for construction, and \texttt{analyzeCircuit()} for analysis.
+        \item Log all exceptions with detailed messages (including \texttt{lineNumber}, \texttt{componentId}, or \texttt{analysisType}) to aid debugging.
+        \item Provide user-friendly feedback via the CLI, suggesting corrective actions (e.g., “Check line 5 for syntax errors”).
+        \item Gracefully recover where possible (e.g., skip invalid elements) or exit with a clear error code for fatal errors (e.g., singular matrix).
+    \end{itemize}
+\end{itemize}
+
+This exception hierarchy and handling strategy ensure that the SPICE simulator is robust
+
+
+
+
+
+
+
+
+
+
+\section*{6. Bonus Questions}
+
+\subsubsection*{6.1 Bonus Question 1: Factory Design Pattern for Element Creation}
+
+\textbf{Question:} Explain how the Factory Design Pattern can be used to create different circuit elements based on user input. Provide a sample code snippet (full implementation is not required).
+
+\textbf{Answer:}
+
+The \textbf{Factory Design Pattern} is ideal for creating circuit elements in the SPICE simulator based on user input, such as lines from a SPICE file (e.g., “R1 1 2 100” for a resistor). The pattern delegates object creation to a factory class, encapsulating the logic for instantiating different \texttt{Element} subclasses (e.g., \texttt{Resistor}, \texttt{VoltageSource}) based on the element type specified in the input. This approach decouples the parsing logic from element creation, making the system extensible and maintainable.
+
+\textbf{How It Works:}
+\begin{itemize}
+    \item A factory class, \texttt{ElementFactory}, defines a method to create \texttt{Element} objects based on input parameters (e.g., element type, ID, nodes, value).
+    \item The parser reads a SPICE file line, extracts the element type (e.g., “R” for resistor), and calls the factory to instantiate the appropriate subclass.
+    \item The factory uses a mapping (e.g., switch or dictionary) to select the correct subclass, ensuring new element types can be added without modifying the parser.
+\end{itemize}
+
+\textbf{Benefits:}
+\begin{itemize}
+    \item \textit{Extensibility}: New elements (e.g., diodes) can be supported by adding new creation logic in the factory.
+    \item \textit{Encapsulation}: Creation details are hidden from the parser, reducing coupling.
+    \item \textit{Flexibility}: Supports dynamic creation based on runtime input.
+\end{itemize]
+
+\textbf{Sample Code Snippet (C++):}
+
+\begin{verbatim}
+#include <string>
+#include <vector>
+
+class Node; // Forward declaration
+class Element; // Forward declaration
+
+class ElementFactory {
+public:
+    static Element* createElement(std::string type, std::string id, 
+                                 std::vector<Node*> nodes, double value) {
+        if (type == "R") {
+            return new Resistor(id, value, nodes);
+        } else if (type == "V") {
+            return new VoltageSource(id, value, nodes);
+        } else if (type == "C") {
+            return new Capacitor(id, value, nodes);
+        } else {
+            throw ParsingException("Unknown element type: " + type, 0);
+        }
+    }
+};
+
+class Element {
+protected:
+    std::string elementId;
+    std::vector<Node*> nodes;
+    double value;
+public:
+    Element(std::string id, double val, std::vector<Node*> n) 
+        : elementId(id), value(val), nodes(n) {}
+    virtual double getCurrent() = 0;
+};
+
+class Resistor : public Element {
+public:
+    Resistor(std::string id, double resistance, std::vector<Node*> nodes)
+        : Element(id, resistance, nodes) {}
+    double getCurrent() override { /* Implement Ohm's law */ return 0.0; }
+};
+
+class VoltageSource : public Element {
+public:
+    VoltageSource(std::string id, double voltage, std::vector<Node*> nodes)
+        : Element(id, voltage, nodes) {}
+    double getCurrent() override { /* Implement source behavior */ return 0.0; }
+};
+
+class Capacitor : public Element {
+public:
+    Capacitor(std::string id, double capacitance, std::vector<Node*> nodes)
+        : Element(id, capacitance, nodes) {}
+    double getCurrent() override { /* Implement capacitor behavior */ return 0.0; }
+};
+\end{verbatim}
+
+In this snippet, \texttt{ElementFactory::createElement} creates the appropriate \texttt{Element} subclass based on the \texttt{type} (e.g., “R” for \texttt{Resistor}). The parser calls this method for each SPICE file line, passing the parsed type, ID, nodes, and value. If an unknown type is encountered, a \texttt{ParsingException} is thrown. This design ensures that the SPICE simulator can handle diverse element types flexibly.
+
+\subsubsection*{6.2 Bonus Question 2: Observer Design Pattern for Real-Time Updates}
+
+\textbf{Question:} Explore how the Observer Design Pattern can be used to display and update simulation results in real time.
+
+\textbf{Answer:}
+
+The \textbf{Observer Design Pattern} enables real-time display and updating of simulation results in the SPICE simulator by allowing display components (Observers) to automatically receive updates when the circuit’s state (Subject) changes. This is particularly useful for visualizing results during transient analysis or iterative simulations, ensuring that GUI or CLI displays reflect the latest circuit data.
+
+\textbf{How It Works:}
+\begin{itemize}
+    \item The \texttt{Circuit} class acts as the Subject, maintaining a list of Observers and notifying them when its state changes (e.g., after each time step in transient analysis or after a DC analysis).
+    \item Observers, such as \texttt{CLIDisplay} or \texttt{GUIDisplay}, register with the \texttt{Circuit} to receive updates. They implement a common interface to process and display the circuit’s state (e.g., node voltages, currents).
+    \item When the \texttt{Circuit} updates its state (e.g., new voltages after a solver step), it notifies all Observers, which then refresh their displays.
+\end{itemize}
+
+\textbf{Design:}
+\begin{itemize}
+    \item \textit{Subject}: The \texttt{Circuit} class maintains a list of \texttt{Observer} pointers and provides methods \texttt{attach(Observer*)} and \texttt{detach(Observer*)} to manage Observers. The \texttt{notify()} method iterates over Observers, calling their \texttt{update()} method with the current circuit state.
+    \item \textit{Observer Interface}: An abstract \texttt{Observer} class with a pure virtual \texttt{update(Circuit* circuit)} method.
+    \item \textit{Concrete Observers}:
+    \begin{itemize]
+        \item \texttt{CLIDisplay}: Prints node voltages or currents to the console in real time (e.g., “Node 1: 5.2V” after each time step).
+        \item \texttt{GUIDisplay}: Updates a graphical interface (e.g., using Qt or SFML) to plot waveforms or display a schematic with live voltage annotations.
+    \end{itemize}
+    \item \textit{Implementation}: During transient analysis, the \texttt{Circuit} solves differential equations (e.g., using Runge-Kutta) at each time step, updates node voltages, and calls \texttt{notify()}. Observers receive the updated \texttt{Circuit} and render the results.
+\end{itemize}
+
+\textbf{Benefits:}
+\begin{itemize}
+    \item \textit{Real-Time Feedback}: Users see simulation results as they are computed, useful for debugging or interactive analysis.
+    \item \textit{Decoupling}: Display logic is separated from simulation logic, allowing multiple display types (CLI, GUI) without modifying \texttt{Circuit}.
+    \item \textit{Extensibility}: New Observers (e.g., a web-based display) can be added easily.
+\end{itemize}
+
+\textbf{Example Workflow:}
+\begin{itemize}
+    \item During transient analysis, \texttt{Circuit} updates voltages every 1ms and calls \texttt{notify()}.
+    \item \texttt{CLIDisplay} prints a table of voltages to the console.
+    \item \texttt{GUIDisplay} refreshes a waveform plot, showing voltage versus time.
+\end{itemize}
+
+This design ensures that the SPICE simulator can provide dynamic, real-time visualization of simulation results, enhancing its usability for both CLI and GUI environments.
+
+\end{xaiArtifact}
+
+
+
+
+
+
+
+
+\section*{6. Bonus Questions}
+
+\subsubsection*{6.1 Bonus Question 1: Factory Design Pattern for Element Creation}
+
+\textbf{Question:} Explain how the Factory Design Pattern can be used to create different circuit elements based on user input. Provide a sample code snippet (full implementation is not required).
+
+\textbf{Answer:}
+
+The \textbf{Factory Design Pattern} is ideal for creating circuit elements in the SPICE simulator based on user input, such as lines from a SPICE file (e.g., “R1 1 2 100” for a resistor). The pattern delegates object creation to a factory class, encapsulating the logic for instantiating different \texttt{Element} subclasses (e.g., \texttt{Resistor}, \texttt{VoltageSource}) based on the element type specified in the input. This approach decouples the parsing logic from element creation, making the system extensible and maintainable.
+
+\textbf{How It Works:}
+\begin{itemize}
+    \item A factory class, \texttt{ElementFactory}, defines a method to create \texttt{Element} objects based on input parameters (e.g., element type, ID, nodes, value).
+    \item The parser reads a SPICE file line, extracts the element type (e.g., “R” for resistor), and calls the factory to instantiate the appropriate subclass.
+    \item The factory uses a mapping (e.g., switch or dictionary) to select the correct subclass, ensuring new element types can be added without modifying the parser.
+\end{itemize}
+
+\textbf{Benefits:}
+\begin{itemize}
+    \item \textit{Extensibility}: New elements (e.g., diodes) can be supported by adding new creation logic in the factory.
+    \item \textit{Encapsulation}: Creation details are hidden from the parser, reducing coupling.
+    \item \textit{Flexibility}: Supports dynamic creation based on runtime input.
+\end{itemize]
+
+\textbf{Sample Code Snippet (C++):}
+
+\begin{verbatim}
+#include <string>
+#include <vector>
+
+class Node; // Forward declaration
+class Element; // Forward declaration
+
+class ElementFactory {
+public:
+    static Element* createElement(std::string type, std::string id, 
+                                 std::vector<Node*> nodes, double value) {
+        if (type == "R") {
+            return new Resistor(id, value, nodes);
+        } else if (type == "V") {
+            return new VoltageSource(id, value, nodes);
+        } else if (type == "C") {
+            return new Capacitor(id, value, nodes);
+        } else {
+            throw ParsingException("Unknown element type: " + type, 0);
+        }
+    }
+};
+
+class Element {
+protected:
+    std::string elementId;
+    std::vector<Node*> nodes;
+    double value;
+public:
+    Element(std::string id, double val, std::vector<Node*> n) 
+        : elementId(id), value(val), nodes(n) {}
+    virtual double getCurrent() = 0;
+};
+
+class Resistor : public Element {
+public:
+    Resistor(std::string id, double resistance, std::vector<Node*> nodes)
+        : Element(id, resistance, nodes) {}
+    double getCurrent() override { /* Implement Ohm's law */ return 0.0; }
+};
+
+class VoltageSource : public Element {
+public:
+    VoltageSource(std::string id, double voltage, std::vector<Node*> nodes)
+        : Element(id, voltage, nodes) {}
+    double getCurrent() override { /* Implement source behavior */ return 0.0; }
+};
+
+class Capacitor : public Element {
+public:
+    Capacitor(std::string id, double capacitance, std::vector<Node*> nodes)
+        : Element(id, capacitance, nodes) {}
+    double getCurrent() override { /* Implement capacitor behavior */ return 0.0; }
+};
+\end{verbatim}
+
+In this snippet, \texttt{ElementFactory::createElement} creates the appropriate \texttt{Element} subclass based on the \texttt{type} (e.g., “R” for \texttt{Resistor}). The parser calls this method for each SPICE file line, passing the parsed type, ID, nodes, and value. If an unknown type is encountered, a \texttt{ParsingException} is thrown. This design ensures that the SPICE simulator can handle diverse element types flexibly.
+
+\subsubsection*{6.2 Bonus Question 2: Observer Design Pattern for Real-Time Updates}
+
+\textbf{Question:} Explore how the Observer Design Pattern can be used to display and update simulation results in real time.
+
+\textbf{Answer:}
+
+The \textbf{Observer Design Pattern} enables real-time display and updating of simulation results in the SPICE simulator by allowing display components (Observers) to automatically receive updates when the circuit’s state (Subject) changes. This is particularly useful for visualizing results during transient analysis or iterative simulations, ensuring that GUI or CLI displays reflect the latest circuit data.
+
+\textbf{How It Works:}
+\begin{itemize}
+    \item The \texttt{Circuit} class acts as the Subject, maintaining a list of Observers and notifying them when its state changes (e.g., after each time step in transient analysis or after a DC analysis).
+    \item Observers, such as \texttt{CLIDisplay} or \texttt{GUIDisplay}, register with the \texttt{Circuit} to receive updates. They implement a common interface to process and display the circuit’s state (e.g., node voltages, currents).
+    \item When the \texttt{Circuit} updates its state (e.g., new voltages after a solver step), it notifies all Observers, which then refresh their displays.
+\end{itemize}
+
+\textbf{Design:}
+\begin{itemize}
+    \item \textit{Subject}: The \texttt{Circuit} class maintains a list of \texttt{Observer} pointers and provides methods \texttt{attach(Observer*)} and \texttt{detach(Observer*)} to manage Observers. The \texttt{notify()} method iterates over Observers, calling their \texttt{update()} method with the current circuit state.
+    \item \textit{Observer Interface}: An abstract \texttt{Observer} class with a pure virtual \texttt{update(Circuit* circuit)} method.
+    \item \textit{Concrete Observers}:
+    \begin{itemize]
+        \item \texttt{CLIDisplay}: Prints node voltages or currents to the console in real time (e.g., “Node 1: 5.2V” after each time step).
+        \item \texttt{GUIDisplay}: Updates a graphical interface (e.g., using Qt or SFML) to plot waveforms or display a schematic with live voltage annotations.
+    \end{itemize}
+    \item \textit{Implementation}: During transient analysis, the \texttt{Circuit} solves differential equations (e.g., using Runge-Kutta) at each time step, updates node voltages, and calls \texttt{notify()}. Observers receive the updated \texttt{Circuit} and render the results.
+\end{itemize}
+
+\textbf{Benefits:}
+\begin{itemize}
+    \item \textit{Real-Time Feedback}: Users see simulation results as they are computed, useful for debugging or interactive analysis.
+    \item \textit{Decoupling}: Display logic is separated from simulation logic, allowing multiple display types (CLI, GUI) without modifying \texttt{Circuit}.
+    \item \textit{Extensibility}: New Observers (e.g., a web-based display) can be added easily.
+\end{itemize}
+
+\textbf{Example Workflow:}
+\begin{itemize}
+    \item During transient analysis, \texttt{Circuit} updates voltages every 1ms and calls \texttt{notify()}.
+    \item \texttt{CLIDisplay} prints a table of voltages to the console.
+    \item \texttt{GUIDisplay} refreshes a waveform plot, showing voltage versus time.
+\end{itemize}
+
+This design ensures that the SPICE simulator can provide dynamic, real-time visualization of simulation results, enhancing its usability for both CLI and GUI environments.
+
+\end{xaiArtifact}
+
+
+
+
+
+
+
+
+\section*{6. Bonus Questions}
+
+\subsubsection*{6.3 Bonus Question 3: Serialization and Deserialization System}
+
+\textbf{Question:} Design a system for storing and loading circuits using serialization and deserialization concepts.
+
+\textbf{Answer:}
+
+A system for saving and loading circuits in the SPICE simulator is designed using the \textbf{Memento} pattern to capture the circuit’s state and C++ \texttt{operator<<}/\texttt{operator>>} for serialization/deserialization to files. This ensures persistent storage and retrieval of circuit configurations.
+
+\begin{itemize}
+    \item \textbf{Memento Pattern:}
+    \begin{itemize}
+        \item \texttt{CircuitMemento}: Stores the \texttt{Circuit} state, including:
+        \begin{itemize]
+            \item \texttt{nodeStates}: Vector of node IDs and voltages.
+            \item \texttt{elementStates}: Vector of element types (e.g., “R”), IDs, values, and connected node IDs.
+        \end{itemize}
+        \item \texttt{Circuit}: Provides \texttt{createMemento()} to generate a memento and \texttt{restoreMemento(CircuitMemento*)} to rebuild the circuit from a memento.
+    \end{itemize}
+    \item \textbf{Serialization/Deserialization:}
+    \begin{itemize}
+        \item \textit{Serialization}: \texttt{operator<<} writes \texttt{CircuitMemento} to a text file, e.g.:
+        \begin{verbatim}
+        NODES 2
+        N1 5.0
+        N2 0.0
+        ELEMENTS 1
+        R R1 100.0 N1 N2
+        \end{verbatim}
+        \item \textit{Deserialization}: \texttt{operator>>} reads the file, populates a \texttt{CircuitMemento}, and \texttt{Circuit::restoreMemento} reconstructs the circuit.
+    \end{itemize}
+    \item \textbf{Workflow:}
+    \begin{itemize]
+        \item Save: \texttt{Circuit} creates a memento; a \texttt{CircuitSerializer} writes it to a file.
+        \item Load: \texttt{CircuitSerializer} reads the file into a memento; \texttt{Circuit} restores the state.
+        \item Errors: Throw \texttt{ParsingException} for invalid file formats, caught by \texttt{CircuitSerializer} to display user-friendly messages.
+    \end{itemize}
+\end{itemize}
+
+This design provides a robust, extensible way to store and retrieve circuits, leveraging Memento for state management and operators for file I/O.
+
+\subsubsection*{6.4 Bonus Question 4: Plugin System for Custom Elements}
+
+\textbf{Question:} Explain the design of a plugin system for the SPICE simulator that allows users to add custom elements without modifying the main program’s code.
+
+\textbf{Answer:}
+
+A plugin system for the SPICE simulator enables users to add custom elements (e.g., diodes) via dynamic libraries using the \textbf{Abstract Factory} pattern for element creation and \textbf{Dependency Injection} for integration, preserving the core code’s integrity.
+
+\begin{itemize}
+    \item \textbf{Abstract Factory:}
+    \begin{itemize}
+        \item \texttt{ElementFactory}: Abstract class with \texttt{virtual Element* createElement(string type, string id, vector<Node*> nodes, double value)}.
+        \item \texttt{CustomElementFactory}: Plugin-specific factory, implemented in a dynamic library, creates custom elements (e.g., \texttt{Diode} for type “D”).
+    \end{itemize}
+    \item \textbf{Dependency Injection:}
+    \begin{itemize]
+        \item \texttt{PluginManager}: Loads dynamic libraries (e.g., `.so`/`.dll`) at runtime, calling an exported \texttt{createFactory()} to obtain \texttt{CustomElementFactory} instances.
+        \item \texttt{Circuit}: Receives a list of \texttt{ElementFactory} objects (default and plugin factories) via constructor or setter, using them to create elements during SPICE file parsing.
+    \end{itemize}
+    \item \textbf{Workflow:}
+    \begin{itemize]
+        \item Users create a dynamic library with a \texttt{Diode} class (inheriting \texttt{Element}) and a \texttt{CustomElementFactory}.
+        \item \texttt{PluginManager} loads plugins, registering their factories.
+        \item \texttt{Circuit} parses a SPICE file (e.g., “D1 1 2 0.7” for a diode), querying all factories to create the element.
+        \item If no factory recognizes the type, a \texttt{ParsingException} is thrown.
+    \end{itemize}
+    \item \textbf{Benefits:}
+    \begin{itemize]
+        \item \textit{Extensibility}: Custom elements are added without core code changes.
+        \item \textit{Modularity}: Abstract Factory isolates creation logic; Dependency Injection decouples plugin integration.
+        \item \textit{Dynamic Loading}: Runtime plugin support enhances flexibility.
+    \end{itemize}
+\end{itemize}
+
+This plugin system ensures the SPICE simulator is open to user-defined elements, maintaining modularity and ease of extension.
+
+\end{xaiArtifact}
+
+
+
+
+
+
+
+
+\section*{6. Bonus Questions}
+
+\subsubsection*{6.5 Bonus Question 5: Logging System Design}
+
+\textbf{Question:} Design a logging system for the SPICE simulator and explain how you can use design patterns like Singleton and Decorator to implement an efficient and customizable logging system.
+
+\textbf{Answer:}
+
+A logging system for the SPICE simulator is designed using the \textbf{Singleton} pattern to ensure a single logger instance and the \textbf{Decorator} pattern to add customizable logging features, such as console output or file logging. This system supports debugging, performance monitoring, and flexible log output configuration.
+
+\begin{itemize}
+    \item \textbf{Singleton Pattern:}
+    \begin{itemize}
+        \item \textit{Purpose}: Ensures a single \texttt{Logger} instance across the simulator, providing a centralized point for logging messages (e.g., errors, simulation steps).
+        \item \textit{Implementation}: The \texttt{Logger} class has a private constructor and a static \texttt{getInstance()} method that returns the unique instance. It includes a method \texttt{log(string message, LogLevel level)} to record messages with severity (e.g., INFO, ERROR).
+        \item \textit{Example}: \texttt{Logger::getInstance()->log("Parsed element R1", INFO)} logs a message from any part of the program.
+        \item \textit{Benefits}: Centralized logging prevents duplicate instances, ensures consistent log formatting, and simplifies access.
+    \end{itemize}
+
+    \item \textbf{Decorator Pattern:}
+    \begin{itemize}
+        \item \textit{Purpose}: Adds logging features (e.g., console output, file logging, timestamping) without modifying the core \texttt{Logger} class, enabling runtime customization.
+        \item \textit{Implementation}:
+        \begin{itemize]
+            \item An abstract \texttt{LogComponent} class with a pure virtual \texttt{log(string message, LogLevel level)} method.
+            \item \texttt{BaseLogger}: A concrete class implementing basic logging (e.g., storing messages in memory).
+            \item Decorators: Concrete classes like \texttt{ConsoleLoggerDecorator}, \texttt{FileLoggerDecorator}, and \texttt{TimestampLoggerDecorator}, each wrapping a \texttt{LogComponent} and adding functionality.
+            \item Example: \texttt{FileLoggerDecorator(ConsoleLoggerDecorator(new BaseLogger()))} logs to both file and console.
+        \end{itemize}
+        \item \textit{Features}:
+        \begin{itemize]
+            \item \texttt{ConsoleLoggerDecorator}: Outputs messages to the console (e.g., \texttt{std::cout << message}).
+            \item \texttt{FileLoggerDecorator}: Appends messages to a log file (e.g., “sim.log”).
+            \item \texttt{TimestampLoggerDecorator}: Prepends timestamps to messages (e.g., “[2025-04-17 10:00] Error”).
+        \end{itemize}
+        \item \textit{Benefits}: Allows dynamic addition of logging features, supports multiple output destinations, and keeps the core logger simple.
+    \end{itemize}
+
+    \item \textbf{Workflow:}
+    \begin{itemize]
+        \item At startup, configure the logger: \texttt{Logger::getInstance()->setComponent(new FileLoggerDecorator(new ConsoleLoggerDecorator(new BaseLogger())))}.
+        \item During simulation, components (e.g., \texttt{Circuit}, parser) call \texttt{Logger::getInstance()->log()} to record events (e.g., “Analysis completed”).
+        \item Decorators process the message, outputting to console, file, or adding timestamps as configured.
+    \end{itemize}
+\end{itemize}
+
+This logging system is efficient, customizable, and extensible, leveraging Singleton for global access and Decorator for flexible output options.
+
+\subsubsection*{6.6 Bonus Question 6: Storing Circuit and Simulation Data}
+
+\textbf{Question:} Research how circuit data and simulation data can be stored. Explain the methods by which this data can be stored so that previous circuits can be accessed upon reopening the program. Focus primarily on data structures such as SQL and JSON. Specify the type used to store each piece of data.
+
+\textbf{Answer:}
+
+To store circuit and simulation data in the SPICE simulator for access upon reopening, I propose using **SQL** (relational database) and **JSON** (file-based) formats. These methods ensure persistent storage of circuit configurations (nodes, elements) and simulation results (e.g., voltages, currents), with specific data types for each component.
+
+\begin{itemize}
+    \item \textbf{SQL (Relational Database):}
+    \begin{itemize}
+        \item \textit{Purpose}: Stores circuit and simulation data in a structured, queryable format using a database (e.g., SQLite for lightweight use).
+        \item \textit{Schema}:
+        \begin{itemize]
+            \item \texttt{Circuits} Table:
+            \begin{itemize]
+                \item \texttt{circuit_id} (INTEGER, primary key): Unique circuit identifier.
+                \item \texttt{name} (TEXT): Circuit name (e.g., “FilterCircuit”).
+            \end{itemize}
+            \item \texttt{Nodes} Table:
+            \begin{itemize]
+                \item \texttt{node_id} (INTEGER, primary key): Unique node identifier.
+                \item \texttt{circuit_id} (INTEGER, foreign key): Links to \texttt{Circuits}.
+                \item \texttt{node_label} (TEXT): Node ID (e.g., “N1”).
+                \item \texttt{voltage} (REAL): Node voltage (e.g., 5.0).
+            \end{itemize}
+            \item \texttt{Elements} Table:
+            \begin{itemize]
+                \item \texttt{element_id} (INTEGER, primary key): Unique element identifier.
+                \item \texttt{circuit_id} (INTEGER, foreign key): Links to \texttt{Circuits}.
+                \item \texttt{type} (TEXT): Element type (e.g., “R”, “V”).
+                \item \texttt{element_label} (TEXT): Element ID (e.g., “R1”).
+                \item \texttt{value} (REAL): Element value (e.g., 100.0 for resistance).
+                \item \texttt{node1_id}, \texttt{node2_id} (INTEGER, foreign keys): Connected node IDs.
+            \end{itemize}
+            \item \texttt{SimulationResults} Table:
+            \begin{itemize]
+                \item \texttt{result_id} (INTEGER, primary key): Unique result identifier.
+                \item \texttt{circuit_id} (INTEGER, foreign key): Links to \texttt{Circuits}.
+                \item \texttt{analysis_type} (TEXT): Analysis type (e.g., “DC”, “Transient”).
+                \item \texttt{time_step} (REAL): Time step for transient results (e.g., 0.001).
+                \item \texttt{node_id} (INTEGER, foreign key): Node for the result.
+                \item \texttt{value} (REAL): Voltage or current at the node.
+            \end{itemize}
+        \end{itemize}
+        \item \textit{Storage Process}: The \texttt{Circuit} class serializes its state to SQL INSERT statements, storing nodes, elements, and results in the respective tables. On reopening, SELECT queries retrieve the data to reconstruct the \texttt{Circuit}.
+        \item \textit{Benefits}: Efficient querying (e.g., retrieve all circuits or results for a specific analysis), relational integrity, and scalability for large datasets.
+    \end{itemize}
+
+    \item \textbf{JSON (File-Based):}
+    \begin{itemize}
+        \item \textit{Purpose}: Stores circuit and simulation data in a portable, human-readable file format using JSON.
+        \item \textit{Structure}:
+        \begin{verbatim}
+        {
+          "circuit": {
+            "name": "FilterCircuit",
+            "nodes": [
+              {"id": "N1", "voltage": 5.0},
+              {"id": "N2", "voltage": 0.0}
+            ],
+            "elements": [
+              {"type": "R", "id": "R1", "value": 100.0, "nodes": ["N1", "N2"]},
+              {"type": "V", "id": "V1", "value": 5.0, "nodes": ["N2", "N0"]}
+            ],
+            "results": [
+              {
+                "analysis_type": "DC",
+                "data": [
+                  {"node_id": "N1", "voltage": 5.0},
+                  {"node_id": "N2", "voltage": 0.0}
+                ]
+              },
+              {
+                "analysis_type": "Transient",
+                "time_steps": [
+                  {"time": 0.001, "node_id": "N1", "voltage": 4.8},
+                  {"time": 0.002, "node_id": "N1", "voltage": 4.9}
+                ]
+              }
+            ]
+          }
+        }
+        \end{verbatim}
+        \item \textit{Data Types}:
+        \begin{itemize]
+            \item \texttt{name}: String (TEXT) for circuit name.
+            \item \texttt{nodes}: Array of objects with \texttt{id} (String) and \texttt{voltage} (Number).
+            \item \texttt{elements}: Array of objects with \texttt{type} (String), \texttt{id} (String), \texttt{value} (Number), and \texttt{nodes} (Array of Strings).
+            \item \texttt{results}: Array of objects with \texttt{analysis_type} (String) and \texttt{data} or \texttt{time_steps} (Arrays of objects with \texttt{node_id} (String), \texttt{voltage} (Number), and optionally \texttt{time} (Number)).
+        \end{itemize}
+        \item \textit{Storage Process}: The \texttt{Circuit} class uses a JSON library (e.g., nlohmann/json in C++) to serialize its state to a JSON file. On reopening, the file is parsed to reconstruct the \texttt{Circuit} and its results.
+        \item \textit{Benefits}: Human-readable, platform-independent, and simple to implement for small to medium datasets.
+    \end{itemize}
+
+    \item \textbf{Access Upon Reopening:}
+    \begin{itemize]
+        \item \textit{SQL}: Query the \texttt{Circuits} table to list saved circuits. Select a \texttt{circuit_id}, then retrieve associated \texttt{Nodes}, \texttt{Elements}, and \texttt{SimulationResults} to rebuild the \texttt{Circuit}.
+        \item \textit{JSON}: Read the JSON file into memory, parse it, and reconstruct the \texttt{Circuit} using its \texttt{nodes}, \texttt{elements}, and \texttt{results} fields. Store multiple circuits in separate JSON files or a single file with an array of circuits.
+    \end{itemize}
+\end{itemize]
+
+SQL is preferred for large-scale simulators with complex querying needs, while JSON is ideal for simplicity and portability. Both methods ensure previous circuits and results are accessible upon reopening, with clear data type mappings for all components.
+
+\end{xaiArtifact}
+
+
+
+
+
+
+\end{document}
