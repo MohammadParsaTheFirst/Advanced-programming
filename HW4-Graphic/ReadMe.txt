@@ -1,7 +1,7 @@
 Here is the link(url) to the Graphic Assignement of the OOP Course,
 you can find the relevant files including the report file and codes in this url:
 
-https://github.com/MohammadParsaTheFirst/Digital-Signal-Processing-Lab/blob/main/Lab6/
+https://github.com/MohammadParsaTheFirst/Advanced-programming/tree/main/HW4-Graphic
 #####################################
 # Name   : MohammadParsa Dini       #
 # std id : 400101204                #
