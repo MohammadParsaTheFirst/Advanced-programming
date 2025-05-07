@@ -1,0 +1,27 @@
+# ninja log v6
+3	370	7683016600901389	build.ninja	7ccea15a71a7c85a
+35	654	7683016020537192	CMakeFiles/graph.dir/main.cpp.obj	b3d6373def620853
+1009	1495	7681776346080532	graph.exe	ab7d8c894be409c6
+49	694	7683016020614801	CMakeFiles/graph.dir/NodeManager.cpp.obj	99cb44ebe1a31c68
+12	867	7681776336109607	CMakeFiles/graph.dir/Component.cpp.obj	dba46d266dfc940c
+45	523	7683016020614801	CMakeFiles/graph.dir/Node.cpp.obj	5a69f7842c442463
+40	1390	7683016020594718	CMakeFiles/graph.dir/circuit_simulator.cpp.obj	452d97283c60560f
+39	746	7683016760097894	CMakeFiles/graph.dir/NodeManager.cpp.obj	99cb44ebe1a31c68
+746	937	7683016767162476	graph.exe	e02545c49b7ef142
+35	672	7683019812954097	CMakeFiles/graph.dir/main.cpp.obj	b3d6373def620853
+39	465	7683021287101014	CMakeFiles/graph.dir/Node.cpp.obj	5a69f7842c442463
+34	652	7683021287051015	CMakeFiles/graph.dir/main.cpp.obj	b3d6373def620853
+46	879	7683021287183085	CMakeFiles/graph.dir/NodeManager.cpp.obj	99cb44ebe1a31c68
+879	1107	7683021295506247	graph.exe	e02545c49b7ef142
+39	632	7683023581291606	CMakeFiles/graph.dir/main.cpp.obj	b3d6373def620853
+10	361	7683033569729881	CMakeFiles/graph.dir/Node.cpp.obj	5a69f7842c442463
+5	554	7683033569729881	CMakeFiles/graph.dir/main.cpp.obj	b3d6373def620853
+6	1005	7683037993837655	CMakeFiles/graph.dir/NodeManager.cpp.obj	99cb44ebe1a31c68
+1006	1331	7683038003834967	graph.exe	e02545c49b7ef142
+14	616	7683058579371661	CMakeFiles/graph.dir/Node.cpp.obj	5a69f7842c442463
+7	990	7683058579301633	CMakeFiles/graph.dir/main.cpp.obj	b3d6373def620853
+20	1456	7683058579436742	CMakeFiles/graph.dir/NodeManager.cpp.obj	99cb44ebe1a31c68
+1456	1813	7683058593803560	graph.exe	e02545c49b7ef142
+47	1023	7683061259327535	CMakeFiles/graph.dir/main.cpp.obj	b3d6373def620853
+55	1531	7683061259407521	CMakeFiles/graph.dir/NodeManager.cpp.obj	99cb44ebe1a31c68
+1531	1866	7683061274162703	graph.exe	e02545c49b7ef142
