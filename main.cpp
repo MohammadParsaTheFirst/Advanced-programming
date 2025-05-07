@@ -9,7 +9,7 @@ NodeType parseNodeType(const std::string& str) {
     if (str == "output") return NodeType::Output;
     return NodeType::Undefined;
 }
-
+//git push -u origin project
 int main() {
     NodeManager manager;
     std::string input;
