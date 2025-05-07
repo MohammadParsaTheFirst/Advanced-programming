@@ -49,18 +49,87 @@ void Circuit::addComponent(std::shared_ptr<Component> component) {
     }
 }
 
-// Implement all getter methods
-const std::vector<std::shared_ptr<Resistor>>& Circuit::getResistors() const { return resistors; }
-// ... implement other getters similarly ...
+bool Circuit::hasGround() const {
+    return nodes.find(0) != nodes.end();
+}
 
-// Implement listing methods
+const std::set<int>& Circuit::getNodes() const {
+    return nodes;
+}
+
+const std::vector<std::shared_ptr<Resistor>>& Circuit::getResistors() const {
+    return resistors;
+}
+
+const std::vector<std::shared_ptr<Capacitor>>& Circuit::getCapacitors() const {
+    return capacitors;
+}
+
+const std::vector<std::shared_ptr<Inductor>>& Circuit::getInductors() const {
+    return inductors;
+}
+
+const std::vector<std::shared_ptr<VoltageSource>>& Circuit::getVoltageSources() const {
+    return voltageSources;
+}
+
+const std::vector<std::shared_ptr<CurrentSource>>& Circuit::getCurrentSources() const {
+    return currentSources;
+}
+
+const std::vector<std::shared_ptr<VCVS>>& Circuit::getVCVSs() const {
+    return vcvss;
+}
+
+void Circuit::listComponents() const {
+    std::cout << "All Components:" << std::endl;
+    for (const auto& comp : components) {
+        comp->print();
+    }
+}
+
 void Circuit::listResistors() const {
     std::cout << "Resistors:" << std::endl;
     for (const auto& r : resistors) {
         r->print();
     }
 }
-// ... implement other list methods similarly ...
+
+void Circuit::listCapacitors() const {
+    std::cout << "Capacitors:" << std::endl;
+    for (const auto& c : capacitors) {
+        c->print();
+    }
+}
+
+void Circuit::listInductors() const {
+    std::cout << "Inductors:" << std::endl;
+    for (const auto& l : inductors) {
+        l->print();
+    }
+}
+
+void Circuit::listVoltageSources() const {
+    std::cout << "Voltage Sources:" << std::endl;
+    for (const auto& vs : voltageSources) {
+        vs->print();
+    }
+}
+
+void Circuit::listCurrentSources() const {
+    std::cout << "Current Sources:" << std::endl;
+    for (const auto& cs : currentSources) {
+        cs->print();
+    }
+}
+
+void Circuit::listNodes() const {
+    std::cout << "Circuit Nodes:";
+    for (int node : nodes) {
+        std::cout << " " << node;
+    }
+    std::cout << std::endl;
+}
 
 void Circuit::validateCircuit() const {
     if (!hasGround()) {

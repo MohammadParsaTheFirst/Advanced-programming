@@ -1,7 +1,15 @@
 # ninja log v6
-3	355	7683196879184153	build.ninja	7ccea15a71a7c85a
 40	642	7683194675696408	CMakeFiles/graph.dir/main.cpp.obj	a6981413c0555990
-1531	1866	7683061274162703	graph.exe	e02545c49b7ef142
+3	355	7683220391616520	build.ninja	7ccea15a71a7c85a
+1569	4272	7683212876223637	graph.exe	2b1c8804b9655ce1
+17	1787	7683204073734558	CMakeFiles/graph.dir/CommandInterface.cpp.obj	5ee3ead5640cdb96
 45	612	7683194675746384	CMakeFiles/graph.dir/Component.cpp.obj	bdf8b726f3146d65
-70	4151	7683194675996491	CMakeFiles/graph.dir/CommandInterface.cpp.obj	5ee3ead5640cdb96
-52	1416	7683194675816459	CMakeFiles/graph.dir/Circuit.cpp.obj	9c2b3847fdce4f25
+47	1565	7683212861007452	CMakeFiles/graph.dir/Circuit.cpp.obj	9c2b3847fdce4f25
+8	4042	7683204073612615	CMakeFiles/graph.dir/MatrixAnalyzer.cpp.obj	8ba83c957f432a83
+6	798	7683220391616520	build.ninja	7ccea15a71a7c85a
+45	511	7683220394227658	CMakeFiles/graph.dir/Component.cpp.obj	3fdd3db2b015205c
+41	563	7683220394197636	CMakeFiles/graph.dir/main.cpp.obj	1c609503c3135b1e
+49	1385	7683220394267654	CMakeFiles/graph.dir/Circuit.cpp.obj	92e282694f35ba41
+65	3889	7683220394427695	CMakeFiles/graph.dir/CommandInterface.cpp.obj	ec73e3189e5d4ba6
+57	6205	7683220394347696	CMakeFiles/graph.dir/MatrixAnalyzer.cpp.obj	3436348875a93980
+6205	8812	7683220455825342	graph.exe	2b1c8804b9655ce1

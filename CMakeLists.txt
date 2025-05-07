@@ -4,7 +4,7 @@ project(graph)
 set(CMAKE_CXX_STANDARD 17)
 
 # === Eigen include path ===
-include_directories("C:/Users/USER/Downloads/eigen-3.4.0/eigen-3.4.0")
+include_directories("C:\\Users\\USER\\CLionProjects\\project\\eigen-3.4.0")
 
 # === SDL2 paths ===
 set(SDL2_DIR "C:/Users/USER/CLionProjects/project/SDL2-devel-2.30.8-mingw/SDL2-2.30.8/x86_64-w64-mingw32")

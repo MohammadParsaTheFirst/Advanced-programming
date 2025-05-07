@@ -1,7 +1,7 @@
 #include "MatrixAnalyzer.h"
 
 MatrixAnalyzer::MatrixAnalyzer(const Circuit& circuit)
-    : circuit(circuit) {}
+    : circuit(circuit), currentTime(0) {}
 
 void MatrixAnalyzer::buildDCMatrix() {
     int numNodes = circuit.getNodes().size() - 1;  // Ground is node 0
@@ -96,7 +96,7 @@ void MatrixAnalyzer::printSolution() const {
         std::cout << "Node " << (i + 1) << ": " << nodeVoltages(i) << " V" << std::endl;
     }
 
-    if (!voltageSourceCurrents.empty()) {
+    if (voltageSourceCurrents.size() > 0) {  // Changed from empty() to size() > 0
         std::cout << "Voltage Source Currents:" << std::endl;
         for (int i = 0; i < voltageSourceCurrents.size(); ++i) {
             std::cout << circuit.getVoltageSources()[i]->getName() << ": "
@@ -105,47 +105,16 @@ void MatrixAnalyzer::printSolution() const {
     }
 }
 
-void buildTransientMatrix(double timeStep) {
-    MatrixAnalyzer::buildDCMatrix(); // Start with DC matrix
-
-    // Add capacitor contributions
-    for (const auto& capacitor : circuit.getCapacitors()) {
-        int n1 = capacitor->getNode1();
-        int n2 = capacitor->getNode2();
-        double conductance = capacitor->getValue() / timeStep;
-
-        if (n1 != 0) {
-            G(n1-1, n1-1) += conductance;
-        }
-        if (n2 != 0) {
-            G(n2-1, n2-1) += conductance;
-        }
-        if (n1 != 0 && n2 != 0) {
-            G(n1-1, n2-1) -= conductance;
-            G(n2-1, n1-1) -= conductance;
-        }
-
-        // Add contribution to J vector from previous time step
-        // (This would require storing previous voltages)
-    }
-
-    // Add inductor contributions similarly
-
-    combineMNAMatrix();
+void MatrixAnalyzer::initializeTransient() {
+    int numNodes = circuit.getNodes().size() - 1;
+    prevNodeVoltages.resize(numNodes);
+    prevNodeVoltages.setZero();
+    currentTime = 0;
 }
 
-void solveTransient(double timeStep, double totalTime) {
-    int steps = static_cast<int>(totalTime / timeStep);
-
-    // Initialize previous voltages (would need to store these)
-
-    for (int step = 0; step < steps; ++step) {
-        buildTransientMatrix(timeStep);
-        solveDC();
-
-        // Update previous voltages for next step
-        // ...
-    }
+void MatrixAnalyzer::updateTransient(double timeStep) {
+    prevNodeVoltages = nodeVoltages;
+    currentTime += timeStep;
 }
 
 void MatrixAnalyzer::buildTransientMatrix(double timeStep) {
@@ -184,9 +153,8 @@ void MatrixAnalyzer::solveTransient(double timeStep, double totalTime) {
         buildTransientMatrix(timeStep);
         solveDC();
         updateTransient(timeStep);
-        currentTime += timeStep;
 
-        // Print or store results as needed
+        std::cout << "Time: " << currentTime << "s" << std::endl;
         printSolution();
     }
 }

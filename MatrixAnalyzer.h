@@ -13,6 +13,10 @@ public:
     void solveDC();
     void printSolution() const;
 
+    // Add these new methods
+    void buildTransientMatrix(double timeStep);
+    void solveTransient(double timeStep, double totalTime);
+
 private:
     const Circuit& circuit;
 
@@ -21,13 +25,13 @@ private:
     Eigen::VectorXd nodeVoltages;
     Eigen::VectorXd voltageSourceCurrents;
 
+    // Add these for transient analysis
     Eigen::VectorXd prevNodeVoltages;
     double currentTime;
 
+    void combineMNAMatrix();
     void initializeTransient();
     void updateTransient(double timeStep);
-
-    void combineMNAMatrix();
 };
 
 #endif // MATRIX_ANALYZER_H
