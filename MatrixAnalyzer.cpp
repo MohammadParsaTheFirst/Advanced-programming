@@ -35,7 +35,7 @@ void MatrixAnalyzer::buildDCMatrix() {
         }
     }
 
-    for (int i = 0; i < numVoltageSources; ++i) {
+    for (int i = 0; i < numVoltageSources; ++i) {// making the adjacency matrices
         const auto& vs = circuit.getVoltageSources()[i];
         int n1 = vs->getNode1();
         int n2 = vs->getNode2();
@@ -64,7 +64,7 @@ void MatrixAnalyzer::buildDCMatrix() {
     combineMNAMatrix();
 }
 
-void MatrixAnalyzer::combineMNAMatrix() {
+void MatrixAnalyzer::combineMNAMatrix() {// block matrix --> to get the adj mat
     int numNodes = G.rows();
     int numVS = E.size();
 

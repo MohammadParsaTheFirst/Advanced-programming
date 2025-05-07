@@ -15,10 +15,10 @@ public:
 
 private:
     std::shared_ptr<Circuit> currentCircuit;
-
     std::vector<std::string> splitCommand(const std::string& input);
 
-    void handleAdd(const std::vector<std::string>& tokens);
+    double parseSpiceValue(const std::string& valueStr);
+
     void addResistor(const std::vector<std::string>& tokens);
     void addCapacitor(const std::vector<std::string>& tokens);
     void addInductor(const std::vector<std::string>& tokens);
@@ -28,10 +28,12 @@ private:
     void addCCVS(const std::vector<std::string>& tokens);
     // Add similar for VCCS and CCCS
 
+    void handleSpiceComponent(const std::vector<std::string>& tokens);
     void handleRename(const std::vector<std::string>& tokens);
     void handleLoad(const std::vector<std::string>& tokens);
-
+    void handleAdd(const std::vector<std::string>& tokens);
     void handleList(const std::vector<std::string>& tokens);
+
     void analyze();
     void printHelp();
 };
